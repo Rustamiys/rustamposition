@@ -3,6 +3,10 @@
 using namespace std;
 
 int main() {
-	cout << "Hello world!";
+	string simvol;
+	cout << "Hello world!\n";
+	cout << "Enter symbol: ";
+	cin >> simvol;
+
 	return 0;
 }
