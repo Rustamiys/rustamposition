@@ -2,11 +2,13 @@
 
 using namespace std;
 
+char* string[];
+
 int main() {
-	string simvol;
+
 	cout << "Hello world!\n";
 	cout << "Enter symbol: ";
-	cin >> simvol;
+	cin >> string;
 
 	return 0;
 }
