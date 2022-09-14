@@ -4,8 +4,7 @@
 using namespace std;
 
 void printmenu();
-
-
+ec
 int main()
 {   
     setlocale(LC_ALL, "Russian");
