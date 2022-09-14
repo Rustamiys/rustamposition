@@ -20,8 +20,6 @@ int main()
         if ((cin.fail()) || (numint > 7)) {
             cin.clear();
             cin.ignore(10, '\n');
-            system("cls");
-            printmenu();
             cout << "Введите корректные данные\n";
             cout << "Пункт номер: ";
 
