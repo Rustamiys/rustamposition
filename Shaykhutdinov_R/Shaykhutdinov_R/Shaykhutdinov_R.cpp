@@ -65,13 +65,7 @@ void enter_work(pipe& newPipe) {
 
 void enter_name(ks& newKS) {
 	cout << "Имя: ";
-	cin >> newKS.name_ks;
-	if (cin.fail()) {
-		cin.clear();
-		cin.ignore(10, '\n');
-		cout << "Введите корректные данные\n";
-		enter_name(newKS);
-	}
+	getline(cin, newKS.name_ks);
 }
 
 void enter_amount(ks& newKS) {
@@ -88,7 +82,7 @@ void enter_amount(ks& newKS) {
 void enter_amount_work(ks& newKS) {
 	cout << "Количество цехов в работе:";
 	cin >> newKS.amount_work_ks;
-	if ((cin.fail()) || (0 > newKS.amount_work_ks > newKS.amount_ks)) {
+	if ((cin.fail()) || (0 > newKS.amount_work_ks) || (newKS.amount_work_ks > newKS.amount_ks)) {
 		cin.clear();
 		cin.ignore(10, '\n');
 		cout << "Введите корректные данные\n";
@@ -109,14 +103,14 @@ void enter_index(ks& newKS) {
 
 void print_pipe(bool bool_pipe, pipe& newPipe) {
 	if (bool_pipe) {
-		cout << "Труба\n" << "{\n";
+		cout << "Труба\n" << "<<\n";
 		cout << "Диаметр: " << newPipe.diam_pipe << endl;
 		cout << "Длина: " << newPipe.len_pipe << endl;
 		if (newPipe.work_pipe == 1) {
-			cout << "В работе\n" << "}\n";
+			cout << "В работе\n" << ">>\n";
 		}
 		else {
-			cout << "Не в работе\n" << "}\n";
+			cout << "Не в работе\n" << ">>\n";
 		}
 		
 	}
@@ -127,11 +121,11 @@ void print_pipe(bool bool_pipe, pipe& newPipe) {
 
 void print_ks(bool bool_ks, ks& newKS) {
 	if (bool_ks) {
-		cout << "КС:\n";
+		cout << "КС\n" << "<<\n";
 		cout << "Имя: " << newKS.name_ks << endl;
 		cout << "Количество цехов: " << newKS.amount_ks << endl;
 		cout << "Количество цехов в работе: " << newKS.amount_work_ks << endl;
-		cout << "Эфективность: " << newKS.index_ks;
+		cout << "Эфективность: " << newKS.index_ks << "\n"<< ">>\n";
 	}
 	else {
 		cout << "КС не найдена\n";
@@ -149,21 +143,47 @@ void edit_pipe(pipe& newPipe) {
 	}
 }
 
-/*void edit_ks(ks&newKS) {
-	if (newKS.) {
-		cout << "Труба находится в работе\n";
-		enter_work(newPipe);
-	}
-	else {
-		cout << "Труба не находится в работе\n";
-		enter_work(newPipe);
-	}
-}*/
-
 void clearcmd() {
 	cin.clear();
 	cin.ignore(10, '\n');
 	system("cls");
+}
+
+void edit_ks(ks&newKS) {
+	cout << "Ввод: ";
+	int enter;
+	cin >> enter;
+	if ((cin.fail()) || ((enter != 1) && (enter != 2) && (enter != 0))) {
+		cin.clear();
+		cin.ignore(10, '\n');
+		cout << "Введите корректные данные\n";
+		edit_ks(newKS);
+	}
+	else {
+		if ((enter == 1) && (newKS.amount_ks - newKS.amount_work_ks <= 0)) {
+			cin.clear();
+			cin.ignore(10, '\n');
+			cout << "Цехов в работе максимальное количество\n";
+			edit_ks(newKS);
+		}
+		else if ((enter == 2) && (newKS.amount_work_ks <= 0)) {
+			cin.clear();
+			cin.ignore(10, '\n');
+			cout << "Цехов в работе минимальное количество\n";
+			edit_ks(newKS);
+		}
+		else if (enter == 1) {
+			newKS.amount_work_ks++;
+			clearcmd();
+			cout << "КС успешно изменена!\n";
+		}
+		else if (enter == 2) {
+			newKS.amount_work_ks--;
+			clearcmd();
+			cout << "КС успешно изменена!\n";
+		}
+		else clearcmd();
+	}
 }
 
 int numbermenu() {
@@ -235,16 +255,32 @@ int main()
 				edit_pipe(newPipe);
 				
 				clearcmd();
-				cout << "Труба успешно изменена!";
+				cout << "Труба успешно изменена!\n";
 			}
 			else {
-				cout << "Труба не найдена";
+				clearcmd();
+				cout << "Труба не найдена\n";
 			}
 		}
 		else if (numint == 5) {
-			return 0;
+			if (bool_ks) {
+				clearcmd();
+				cout << "Цехов всего: " << newKS.amount_ks << endl;
+				cout << "Цехов в работе: " << newKS.amount_work_ks << endl;
+				cout << "1. Увеличить количество цехов\n";
+				cout << "2. Уменьшить количество цехов\n";
+				cout << "0. Выход в главное меню\n";
+				edit_ks(newKS);
+			}
+			else {
+				clearcmd();
+				cout << "КС не найдена\n";
+			}
 		}
 		else if (numint == 6) {
+			return 0;
+		}
+		else if (numint == 7) {
 			return 0;
 		}
 		else {
