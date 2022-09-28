@@ -1,7 +1,10 @@
 ﻿#include <iostream>
 #include <string>
+#include <fstream>
 
 using namespace std;
+
+//https://proginfo.ru
 
 struct pipe
 {
@@ -27,6 +30,26 @@ void printmenu() {
 	cout << "6. Сохранить \n";
 	cout << "7. Загрузить \n";
 	cout << "0. Выход \n";
+}
+
+int numbermenu() {
+	int numint;
+	cin >> numint;
+	if ((cin.fail()) || (numint > 7)) {
+		cin.clear();
+		cin.ignore(10, '\n');
+		cout << "Введите корректные данные: ";
+		numbermenu();
+	}
+	else {
+		return numint;
+	}
+}
+
+void clearcmd() {
+	cin.clear();
+	cin.ignore(10, '\n');
+	system("cls");
 }
 
 void enter_diam(pipe& newPipe) {
@@ -115,7 +138,7 @@ void print_pipe(bool bool_pipe, pipe& newPipe) {
 		
 	}
 	else {
-		cout << "Труба не найдена\n";
+	cout << "Труба не найдена\n";
 	}
 }
 
@@ -125,7 +148,7 @@ void print_ks(bool bool_ks, ks& newKS) {
 		cout << "Имя: " << newKS.name_ks << endl;
 		cout << "Количество цехов: " << newKS.amount_ks << endl;
 		cout << "Количество цехов в работе: " << newKS.amount_work_ks << endl;
-		cout << "Эфективность: " << newKS.index_ks << "\n"<< ">>\n";
+		cout << "Эфективность: " << newKS.index_ks << "\n" << ">>\n";
 	}
 	else {
 		cout << "КС не найдена\n";
@@ -143,13 +166,7 @@ void edit_pipe(pipe& newPipe) {
 	}
 }
 
-void clearcmd() {
-	cin.clear();
-	cin.ignore(10, '\n');
-	system("cls");
-}
-
-void edit_ks(ks&newKS) {
+void edit_ks(ks& newKS) {
 	cout << "Ввод: ";
 	int enter;
 	cin >> enter;
@@ -186,18 +203,79 @@ void edit_ks(ks&newKS) {
 	}
 }
 
-int numbermenu() {
-	int numint;
-	cin >> numint;
-	if ((cin.fail()) || (numint > 7)) {
-		cin.clear();
-		cin.ignore(10, '\n');
-		cout << "Введите корректные данные: ";
-		numbermenu();
+void save_to_file(pipe& newPipe, ks& newKS) {
+	ofstream fout;
+	fout.open("output.txt");
+
+	if (!fout.is_open()) {
+		cout << "Не получилось открыть файл!";
 	}
 	else {
-		return numint;
+		fout << newPipe.diam_pipe << endl;
+		fout << newPipe.len_pipe << endl;
+		fout << newPipe.work_pipe << endl;
+
+		fout << newKS.name_ks << endl;
+		fout << newKS.amount_ks << endl;
+		fout << newKS.amount_work_ks << endl;
+		fout << newKS.amount_work_ks << endl;
 	}
+	fout.close();
+}
+
+bool download_from_file(pipe& newPipe, ks& newKS) {
+	ifstream fin;
+	fin.open("input.txt");
+	bool bool_valid = true;
+	if (!fin.is_open()) {
+		cout << "Не получилось открыть файл!";
+	}
+	else {
+		int i = 0;
+		for (i == 0; i <= 6; i++) {
+			if (i == 0) {
+				fin >> newPipe.diam_pipe;
+				if (newPipe.diam_pipe < 0){
+					bool_valid = false;
+				}
+			}
+			else if (i == 1) {
+				fin >> newPipe.len_pipe;
+				if (newPipe.len_pipe < 0) {
+					bool_valid = false;
+				}
+			}
+			else if (i == 2) {
+				fin >> newPipe.work_pipe;
+				if ((newPipe.work_pipe != 0) && (newPipe.work_pipe != 1)) {
+					bool_valid = false;
+				}
+			}
+			else if (i == 3) {
+				fin >> newKS.name_ks;
+			}
+			else if (i == 4) {
+				fin >> newKS.amount_ks;
+				if (newKS.amount_ks < 0) {
+					bool_valid = false;
+				}
+			}
+			else if (i == 5) {
+				fin >> newKS.amount_work_ks;
+				if ((newKS.amount_work_ks < 0) || (newKS.amount_ks < newKS.amount_work_ks)) {
+					bool_valid = false;
+				}
+			}
+			else if (i == 6) {
+				fin >> newKS.index_ks;
+				if (newKS.index_ks < 0) {
+					bool_valid = false;
+				}
+			}
+		}
+	}
+	fin.close();
+	return bool_valid;
 }
 
 int main()
@@ -207,7 +285,6 @@ int main()
 	int numint;
 	pipe newPipe;
 	ks newKS;
-
 	for (;;) {
 
 		printmenu();
@@ -278,10 +355,25 @@ int main()
 			}
 		}
 		else if (numint == 6) {
-			return 0;
+			if (bool_ks && bool_pipe) {
+				save_to_file(newPipe, newKS);
+			}
+			else {
+				cout << "Данных не достаточно\n";
+			}
+			clearcmd();
+			cout << "Успешно сохранено\n";
 		}
 		else if (numint == 7) {
-			return 0;
+			clearcmd();
+			if (download_from_file(newPipe, newKS)) {
+				bool_ks = true;
+				bool_pipe = true;
+			}
+			else {
+				cout << "Ошибка\n";
+			}
+			 
 		}
 		else {
 			return 0;
