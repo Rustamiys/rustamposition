@@ -4,12 +4,11 @@
 
 using namespace std;
 
-//https://proginfo.ru
 
 struct pipe
 {
-	int diam_pipe;
-	int len_pipe;
+	double diam_pipe;
+	double len_pipe;
 	bool work_pipe;
 };
 
@@ -18,7 +17,7 @@ struct ks
 	string name_ks;
 	int amount_ks;
 	int amount_work_ks;
-	float index_ks;
+	double index_ks;
 };
 
 void printmenu() {
@@ -32,58 +31,82 @@ void printmenu() {
 	cout << "0. Выход \n";
 }
 
+void clear_buffer() {
+	cin.clear();
+	cin.ignore(1024, '\n');
+}
+
 int numbermenu() {
 	int numint;
-	cin >> numint;
-	if ((cin.fail()) || (numint > 7)) {
-		cin.clear();
-		cin.ignore(10, '\n');
-		cout << "Введите корректные данные: ";
-		numbermenu();
-	}
-	else {
-		return numint;
+	for (;;) {
+		cin >> numint;
+		if ((cin.fail()) || (numint > 7)) {
+			clear_buffer();
+			cout << "Введите корректные данные: ";
+		}
+		else {
+			return numint;
+		}
 	}
 }
 
 void clearcmd() {
-	cin.clear();
-	cin.ignore(10, '\n');
+	clear_buffer();
 	system("cls");
 }
 
 void enter_diam(pipe& newPipe) {
 	cout << "Диаметр: ";
-	cin >> newPipe.diam_pipe;
-	if ((cin.fail()) || (newPipe.diam_pipe < 0)) {
-		cin.clear();
-		cin.ignore(10, '\n');
-		cout << "Введите корректные данные\n";
-		enter_diam(newPipe);
+	for (;;) {
+		cin >> newPipe.diam_pipe;
+		if ((cin.fail()) || (newPipe.diam_pipe <= 0)) {
+			clear_buffer();
+			cout << "Введите корректные данные: ";
+		}
+		else {
+			break;
+		}
 	}
 }
 
 void enter_len(pipe& newPipe) {
 	cout << "Длина: ";
-	cin >> newPipe.len_pipe;
-	if ((cin.fail()) || (newPipe.len_pipe < 0)) {
-		cin.clear();
-		cin.ignore(10, '\n');
-		cout << "Введите корректные данные\n";
-		enter_len(newPipe);
+	for (;;) {
+		cin >> newPipe.len_pipe;
+		if ((cin.fail()) || (newPipe.len_pipe <= 0)) {
+			clear_buffer();
+			cout << "Введите корректные данные: ";
+		}
+		else {
+			break;
+		}
 	}
 }
 
 void enter_work(pipe& newPipe) {
 	cout << "В работе: ";
-	cin >> newPipe.work_pipe;
-	if (cin.fail()) {
-		cin.clear();
-		cin.ignore(10, '\n');
-		cout << "Введите корректные данные\n";
-		enter_work(newPipe);
+	for (;;) {
+		cin >> newPipe.work_pipe;
+		if (cin.fail()) {
+			clear_buffer();
+			cout << "Введите корректные данные: ";
+		}
+		else {
+			break;
+		}
 	}
-	newPipe.work_pipe;
+}
+
+
+void enter_pipe(pipe& newPipe) {
+
+	enter_diam(newPipe);
+	enter_len(newPipe);
+	enter_work(newPipe);
+
+	clearcmd();
+	cout << "Труба добавлена\n";
+
 }
 
 void enter_name(ks& newKS) {
@@ -93,123 +116,149 @@ void enter_name(ks& newKS) {
 
 void enter_amount(ks& newKS) {
 	cout << "Количество цехов: ";
-	cin >> newKS.amount_ks;
-	if ((cin.fail()) || (newKS.amount_ks < 0)) {
-		cin.clear();
-		cin.ignore(10, '\n');
-		cout << "Введите корректные данные\n";
-		enter_amount(newKS);
+	for (;;) {
+		cin >> newKS.amount_ks;
+
+		if ((cin.fail()) || (newKS.amount_ks < 0)) {
+			clear_buffer();
+			cout << "Введите корректные данные: ";
+		}
+
+		else {
+			break;
+		}
 	}
 }
 
 void enter_amount_work(ks& newKS) {
 	cout << "Количество цехов в работе:";
-	cin >> newKS.amount_work_ks;
-	if ((cin.fail()) || (0 > newKS.amount_work_ks) || (newKS.amount_work_ks > newKS.amount_ks)) {
-		cin.clear();
-		cin.ignore(10, '\n');
-		cout << "Введите корректные данные\n";
-		enter_amount_work(newKS);
+	for (;;) {
+		cin >> newKS.amount_work_ks;
+
+		if ((cin.fail()) || (newKS.amount_work_ks < 0) || (newKS.amount_work_ks > newKS.amount_ks)) {
+			clear_buffer();
+			cout << "Введите корректные данные: ";
+		}
+
+		else {
+			break;
+		}
 	}
 }
 
 void enter_index(ks& newKS) {
 	cout << "Эффективность: ";
-	cin >> newKS.index_ks;
-	if ((cin.fail()) || (newKS.index_ks <= 0)) {
-		cin.clear();
-		cin.ignore(10, '\n');
-		cout << "Введите корректные данные\n";
-		enter_index(newKS);
-	}
-}
+	for (;;) {
+		cin >> newKS.index_ks;
 
-void print_pipe(bool bool_pipe, pipe& newPipe) {
-	if (bool_pipe) {
-		cout << "Труба\n" << "<<\n";
-		cout << "Диаметр: " << newPipe.diam_pipe << endl;
-		cout << "Длина: " << newPipe.len_pipe << endl;
-		if (newPipe.work_pipe == 1) {
-			cout << "В работе\n" << ">>\n";
+		if ((cin.fail()) || (newKS.index_ks <= 0)) {
+			clear_buffer();
+			cout << "Введите корректные данные: ";
 		}
+
 		else {
-			cout << "Не в работе\n" << ">>\n";
+			break;
 		}
-		
-	}
-	else {
-	cout << "Труба не найдена\n";
 	}
 }
 
-void print_ks(bool bool_ks, ks& newKS) {
-	if (bool_ks) {
-		cout << "КС\n" << "<<\n";
-		cout << "Имя: " << newKS.name_ks << endl;
-		cout << "Количество цехов: " << newKS.amount_ks << endl;
-		cout << "Количество цехов в работе: " << newKS.amount_work_ks << endl;
-		cout << "Эфективность: " << newKS.index_ks << "\n" << ">>\n";
-	}
-	else {
-		cout << "КС не найдена\n";
-	}
+void enter_ks(ks& newKS) {
+	enter_name(newKS);
+	enter_amount(newKS);
+	enter_amount_work(newKS);
+	enter_index(newKS);
+
+	clearcmd();
+	cout << "КС добавлена\n";
+
+}
+
+
+void print_pipe(const pipe& newPipe) {
+	cout << "Труба\n" << "<<\n";
+	cout << "Диаметр: " << newPipe.diam_pipe << endl;
+	cout << "Длина: " << newPipe.len_pipe << endl;
+	cout << (newPipe.work_pipe ? "В работе" : "Не в работе") << endl << ">>\n";
+}
+
+void print_ks(const ks& newKS) {
+	cout << "КС\n" << "<<\n";
+	cout << "Имя: " << newKS.name_ks << endl;
+	cout << "Количество цехов: " << newKS.amount_ks << endl;
+	cout << "Количество цехов в работе: " << newKS.amount_work_ks << endl;
+	cout << "Эфективность: " << newKS.index_ks << endl << ">>\n";
 }
 
 void edit_pipe(pipe& newPipe) {
-	if (newPipe.work_pipe) {
-		cout << "Труба находится в работе\n";
-		enter_work(newPipe);
-	}
-	else {
-		cout << "Труба не находится в работе\n";
-		enter_work(newPipe);
+	cout << (newPipe.work_pipe ? "Труба находится в работе" : "Труба не находится в работе") << endl;
+	cout << "В работе: ";
+	for (;;) {
+		cin >> newPipe.work_pipe;
+		if (cin.fail()) {
+			clear_buffer();
+			cout << "Введите корректные данные: ";
+		}
+		else {
+			clearcmd();
+			cout << "Труба успешно изменена!\n";
+			break;
+		}
 	}
 }
 
 void edit_ks(ks& newKS) {
-	cout << "Ввод: ";
-	int enter;
-	cin >> enter;
-	if ((cin.fail()) || ((enter != 1) && (enter != 2) && (enter != 0))) {
-		cin.clear();
-		cin.ignore(10, '\n');
-		cout << "Введите корректные данные\n";
-		edit_ks(newKS);
-	}
-	else {
-		if ((enter == 1) && (newKS.amount_ks - newKS.amount_work_ks <= 0)) {
-			cin.clear();
-			cin.ignore(10, '\n');
-			cout << "Цехов в работе максимальное количество\n";
-			edit_ks(newKS);
+	cout << "Цехов всего: " << newKS.amount_ks << endl;
+	cout << "Цехов в работе: " << newKS.amount_work_ks << endl;
+	cout << "1. Увеличить количество цехов\n";
+	cout << "2. Уменьшить количество цехов\n";
+	cout << "0. Выход в главное меню\n";
+	cout << "Пункт номер: ";
+	for (;;) {
+		int enter;
+		cin >> enter;
+		if ((cin.fail()) || ((enter != 1) && (enter != 2) && (enter != 0))) {
+			clear_buffer();
+			cout << "Введите корректные данные: ";
 		}
-		else if ((enter == 2) && (newKS.amount_work_ks <= 0)) {
-			cin.clear();
-			cin.ignore(10, '\n');
-			cout << "Цехов в работе минимальное количество\n";
-			edit_ks(newKS);
+		else {
+			if ((enter == 1) && (newKS.amount_ks - newKS.amount_work_ks <= 0)) {
+				clear_buffer();
+				cout << "Цехов в работе максимальное количество\n";
+				cout << "Введите корректные данные: ";
+			}
+			else if ((enter == 2) && (newKS.amount_work_ks <= 0)) {
+				clear_buffer();
+				cout << "Цехов в работе минимальное количество\n";
+				cout << "Введите корректные данные: ";
+			}
+			else if (enter == 1) {
+				newKS.amount_work_ks++;
+				clearcmd();
+				cout << "КС успешно изменена!\n";
+				break;
+			}
+			else if (enter == 2) {
+				newKS.amount_work_ks--;
+				clearcmd();
+				cout << "КС успешно изменена!\n";
+				break;
+			}
+			else {
+				clearcmd();
+				break;
+			}
 		}
-		else if (enter == 1) {
-			newKS.amount_work_ks++;
-			clearcmd();
-			cout << "КС успешно изменена!\n";
-		}
-		else if (enter == 2) {
-			newKS.amount_work_ks--;
-			clearcmd();
-			cout << "КС успешно изменена!\n";
-		}
-		else clearcmd();
 	}
 }
 
-void save_to_file(pipe& newPipe, ks& newKS) {
+void save_to_file(const pipe& newPipe, const ks& newKS) {
 	ofstream fout;
 	fout.open("output.txt");
 
 	if (!fout.is_open()) {
 		cout << "Не получилось открыть файл!";
 	}
+
 	else {
 		fout << newPipe.diam_pipe << endl;
 		fout << newPipe.len_pipe << endl;
@@ -220,62 +269,51 @@ void save_to_file(pipe& newPipe, ks& newKS) {
 		fout << newKS.amount_work_ks << endl;
 		fout << newKS.amount_work_ks << endl;
 	}
+
 	fout.close();
 }
 
-bool download_from_file(pipe& newPipe, ks& newKS) {
+void download_from_file(pipe& newPipe, ks& newKS, bool& bool_pipe, bool& bool_ks) {
 	ifstream fin;
-	fin.open("input.txt");
-	bool bool_valid = true;
+	string line;
+	bool_pipe = true;
+	bool_ks = true;
+
+	fin.open("output.txt");
+
 	if (!fin.is_open()) {
 		cout << "Не получилось открыть файл!";
 	}
 	else {
-		int i = 0;
-		for (i == 0; i <= 6; i++) {
-			if (i == 0) {
-				fin >> newPipe.diam_pipe;
-				if (newPipe.diam_pipe < 0){
-					bool_valid = false;
-				}
-			}
-			else if (i == 1) {
-				fin >> newPipe.len_pipe;
-				if (newPipe.len_pipe < 0) {
-					bool_valid = false;
-				}
-			}
-			else if (i == 2) {
-				fin >> newPipe.work_pipe;
-				if ((newPipe.work_pipe != 0) && (newPipe.work_pipe != 1)) {
-					bool_valid = false;
-				}
-			}
-			else if (i == 3) {
-				fin >> newKS.name_ks;
-			}
-			else if (i == 4) {
-				fin >> newKS.amount_ks;
-				if (newKS.amount_ks < 0) {
-					bool_valid = false;
-				}
-			}
-			else if (i == 5) {
-				fin >> newKS.amount_work_ks;
-				if ((newKS.amount_work_ks < 0) || (newKS.amount_ks < newKS.amount_work_ks)) {
-					bool_valid = false;
-				}
-			}
-			else if (i == 6) {
-				fin >> newKS.index_ks;
-				if (newKS.index_ks < 0) {
-					bool_valid = false;
-				}
-			}
+		fin >> newPipe.diam_pipe;
+		fin >> newPipe.len_pipe;
+		fin >> newPipe.work_pipe;
+
+		getline(fin, newKS.name_ks);
+		getline(fin, newKS.name_ks);
+
+		fin >> newKS.amount_ks;
+		fin >> newKS.amount_work_ks;
+		fin >> newKS.index_ks;
+
+		if ((newPipe.diam_pipe > 0) && (newPipe.len_pipe > 0) && ((newPipe.work_pipe == 1) || (newPipe.work_pipe == 0))) {
+			bool_pipe = 1;
+		}
+		else {
+			bool_pipe = 0;
+		}
+		if ((newKS.amount_ks >= 0) && (newKS.amount_work_ks >= 0) && (newKS.index_ks > 0) && (newKS.amount_work_ks <= newKS.amount_ks)) {
+			bool_ks = 1;
+		}
+		else {
+			bool_ks = 0;
 		}
 	}
+	
+	cout << (bool_pipe ? "Труба загрузилась" : "Труба не загрузилaсь") << endl;
+	cout << (bool_ks ? "КС загрузилась" : "КС не загрузилaсь") << endl;
+	
 	fin.close();
-	return bool_valid;
 }
 
 int main()
@@ -291,89 +329,61 @@ int main()
 		cout << "Пункт номер: ";
 		numint = numbermenu();
 
+		clearcmd();
 
-		if (numint == 0) {
-			return 0;
-		}
-		else if (numint == 1) {
-			clearcmd();
+		if (numint == 1) {
+			enter_pipe(newPipe);
 
-			enter_diam(newPipe);
-			enter_len(newPipe);
-			enter_work(newPipe);
-
-			clearcmd();
-			bool_pipe = 1;
-			cout << "Труба добавлена\n";
+			bool_pipe = true;
 		}
 		else if (numint == 2) {
-			clearcmd();
+			enter_ks(newKS);
 
-			enter_name(newKS);
-			enter_amount(newKS);
-			enter_amount_work(newKS);
-			enter_index(newKS);
-
-			clearcmd();
-			bool_ks = 1;
-			cout << "КС добавлена\n";
+			bool_ks = true;
 		}
 		else if (numint == 3) {
-			clearcmd();
+			if (bool_pipe) {
+				print_pipe(newPipe);
+			}
+			else {
+				cout << "Труба не найдена!\n";
+			}
 
-			print_pipe(bool_pipe, newPipe);
-			print_ks(bool_ks, newKS);
-
+			if (bool_ks) {
+				print_ks(newKS);
+			}
+			else {
+				cout << "КС не найдена!\n";
+			}
 		}
 		else if (numint == 4) {
 			if (bool_pipe) {
-				clearcmd();
 
 				edit_pipe(newPipe);
-				
-				clearcmd();
-				cout << "Труба успешно изменена!\n";
 			}
 			else {
-				clearcmd();
 				cout << "Труба не найдена\n";
 			}
 		}
 		else if (numint == 5) {
 			if (bool_ks) {
-				clearcmd();
-				cout << "Цехов всего: " << newKS.amount_ks << endl;
-				cout << "Цехов в работе: " << newKS.amount_work_ks << endl;
-				cout << "1. Увеличить количество цехов\n";
-				cout << "2. Уменьшить количество цехов\n";
-				cout << "0. Выход в главное меню\n";
 				edit_ks(newKS);
 			}
 			else {
-				clearcmd();
 				cout << "КС не найдена\n";
 			}
 		}
 		else if (numint == 6) {
 			if (bool_ks && bool_pipe) {
 				save_to_file(newPipe, newKS);
+				cout << "Успешно сохранено\n";
 			}
 			else {
-				cout << "Данных не достаточно\n";
+				cout << "Данных недостаточно\n";
 			}
-			clearcmd();
-			cout << "Успешно сохранено\n";
 		}
 		else if (numint == 7) {
-			clearcmd();
-			if (download_from_file(newPipe, newKS)) {
-				bool_ks = true;
-				bool_pipe = true;
-			}
-			else {
-				cout << "Ошибка\n";
-			}
-			 
+			download_from_file(newPipe, newKS, bool_pipe, bool_ks);
 		}
 		else {
 			return 0;
