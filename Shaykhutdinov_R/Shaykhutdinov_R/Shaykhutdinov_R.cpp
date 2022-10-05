@@ -221,7 +221,7 @@ void edit_ks(ks& newKS) {
 			cout << "Введите корректные данные: ";
 		}
 		else {
-			if ((enter == 1) && (newKS.amount_ks - newKS.amount_work_ks <= 0)) {
+			if ((enter == 1) && (newKS.amount_ks <= newKS.amount_work_ks)) {
 				clear_buffer();
 				cout << "Цехов в работе максимальное количество\n";
 				cout << "Введите корректные данные: ";
@@ -260,14 +260,22 @@ void save_to_file(const pipe& newPipe, const ks& newKS) {
 	}
 
 	else {
-		fout << newPipe.diam_pipe << endl;
-		fout << newPipe.len_pipe << endl;
-		fout << newPipe.work_pipe << endl;
+		if ((newPipe.diam_pipe > 0) && (newPipe.len_pipe > 0) && ((newPipe.work_pipe == 1) || (newPipe.work_pipe == 0))) {
 
-		fout << newKS.name_ks << endl;
-		fout << newKS.amount_ks << endl;
-		fout << newKS.amount_work_ks << endl;
-		fout << newKS.amount_work_ks << endl;
+			fout << newPipe.diam_pipe << endl;
+			fout << newPipe.len_pipe << endl;
+			fout << newPipe.work_pipe << endl;
+		}
+		else {
+			fout << 0 << endl << 0 << endl << 0 << endl;
+		}
+
+		if ((newKS.amount_ks >= 0) && (newKS.amount_work_ks >= 0) && (newKS.index_ks > 0) && (newKS.amount_work_ks <= newKS.amount_ks)) {
+			fout << newKS.name_ks << endl;
+			fout << newKS.amount_ks << endl;
+			fout << newKS.amount_work_ks << endl;
+			fout << newKS.amount_work_ks << endl;
+		}
 	}
 
 	fout.close();
@@ -374,7 +382,7 @@ int main()
 			}
 		}
 		else if (numint == 6) {
-			if (bool_ks && bool_pipe) {
+			if (bool_ks || bool_pipe) {
 				save_to_file(newPipe, newKS);
 				cout << "Успешно сохранено\n";
 			}
