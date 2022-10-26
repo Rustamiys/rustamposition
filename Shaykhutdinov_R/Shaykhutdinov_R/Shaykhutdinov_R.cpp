@@ -1,400 +1,217 @@
 ﻿#include <iostream>
 #include <string>
 #include <fstream>
+#include "Pipe.h"
+#include "Station.h"
+#include <map>
 
 using namespace std;
 
-
-struct pipe
-{
-	double diam_pipe;
-	double len_pipe;
-	bool work_pipe;
-};
-
-struct ks
-{
-	string name_ks;
-	int amount_ks;
-	int amount_work_ks;
-	double index_ks;
-};
-
-void printmenu() {
-	cout << "1. Добавить трубу\n";
-	cout << "2. Добавить КС\n";
-	cout << "3. Просмотр всех объектов \n";
-	cout << "4. Редактировать трубу \n";
-	cout << "5. Редактировать КС \n";
-	cout << "6. Сохранить \n";
-	cout << "7. Загрузить \n";
-	cout << "0. Выход \n";
+void printMenu() {
+	cout << "1. Добавить трубу" << endl;
+	cout << "2. Добавить КС" << endl;
+	cout << "3. Просмотр всех объектов" << endl;
+	cout << "4. Редактировать трубу" << endl;
+	cout << "5. Редактировать КС" << endl;
+	cout << "6. Сохранить" << endl;
+	cout << "7. Загрузить" << endl;
+	cout << "0. Выход" << endl;
 }
 
-void clear_buffer() {
+template <typename T>
+T GetCorrectNumber(string text, T min, T max) {
+	cout << text;
+	T number;
+	cin >> number;
+	for (;;) {
+		if (cin.fail() || number < min || number > max) {
+			cin.clear();
+			cin.ignore(1024, '\n');
+			cout << "Введите корректные данные(" << min << "-" << max << "): ";
+			cin >> number;
+		}
+		else {
+			return number;
+		}
+	}
+	
+}
+
+void addPipe(map <unsigned int, Pipe>&pipes, Pipe& newPipe) {
 	cin.clear();
 	cin.ignore(1024, '\n');
+	string name;
+	cout << "Имя трубы: ";
+	getline(cin, name);
+	newPipe.setName(name);
+	newPipe.setLength(GetCorrectNumber("Длина: ", 0.00001, 3.4E+38));
+	newPipe.setDiametr(GetCorrectNumber("Диаметр: ", 0.00001, 3.4E+38));
+	newPipe.setInRepair(GetCorrectNumber("В работе: ", 0, 1));
+	newPipe.id++;
+	
+	pipes.emplace(newPipe.id, newPipe);
 }
 
-int numbermenu() {
-	int numint;
-	for (;;) {
-		cin >> numint;
-		if ((cin.fail()) || (numint > 7)) {
-			clear_buffer();
-			cout << "Введите корректные данные: ";
+void printPipe(map <unsigned int, Pipe>& pipes) {
+	int i;
+	if (!pipes.empty()) {
+		for (auto it : pipes) {
+			i = it.first;
+			cout << endl << "Имя: " << pipes[i].getName() << endl;
+			cout << "ID: " << pipes[i].id << endl;
+			cout << "Длина: " << pipes[i].getLength() << endl;
+			cout << "Диаметр: " << pipes[i].getDiametr() << endl;
+			cout << ((pipes[i].getInRepair())? "В работе " : "Не в работе") << endl << endl;
 		}
-		else {
-			return numint;
-		}
-	}
-}
-
-void clearcmd() {
-	clear_buffer();
-	system("cls");
-}
-
-void enter_diam(pipe& newPipe) {
-	cout << "Диаметр: ";
-	for (;;) {
-		cin >> newPipe.diam_pipe;
-		if ((cin.fail()) || (newPipe.diam_pipe <= 0)) {
-			clear_buffer();
-			cout << "Введите корректные данные: ";
-		}
-		else {
-			break;
-		}
-	}
-}
-
-void enter_len(pipe& newPipe) {
-	cout << "Длина: ";
-	for (;;) {
-		cin >> newPipe.len_pipe;
-		if ((cin.fail()) || (newPipe.len_pipe <= 0)) {
-			clear_buffer();
-			cout << "Введите корректные данные: ";
-		}
-		else {
-			break;
-		}
-	}
-}
-
-void enter_work(pipe& newPipe) {
-	cout << "В работе: ";
-	for (;;) {
-		cin >> newPipe.work_pipe;
-		if (cin.fail()) {
-			clear_buffer();
-			cout << "Введите корректные данные: ";
-		}
-		else {
-			break;
-		}
-	}
-}
-
-
-void enter_pipe(pipe& newPipe) {
-
-	enter_diam(newPipe);
-	enter_len(newPipe);
-	enter_work(newPipe);
-
-	clearcmd();
-	cout << "Труба добавлена\n";
-
-}
-
-void enter_name(ks& newKS) {
-	cout << "Имя: ";
-	getline(cin, newKS.name_ks);
-}
-
-void enter_amount(ks& newKS) {
-	cout << "Количество цехов: ";
-	for (;;) {
-		cin >> newKS.amount_ks;
-
-		if ((cin.fail()) || (newKS.amount_ks < 0)) {
-			clear_buffer();
-			cout << "Введите корректные данные: ";
-		}
-
-		else {
-			break;
-		}
-	}
-}
-
-void enter_amount_work(ks& newKS) {
-	cout << "Количество цехов в работе:";
-	for (;;) {
-		cin >> newKS.amount_work_ks;
-
-		if ((cin.fail()) || (newKS.amount_work_ks < 0) || (newKS.amount_work_ks > newKS.amount_ks)) {
-			clear_buffer();
-			cout << "Введите корректные данные: ";
-		}
-
-		else {
-			break;
-		}
-	}
-}
-
-void enter_index(ks& newKS) {
-	cout << "Эффективность: ";
-	for (;;) {
-		cin >> newKS.index_ks;
-
-		if ((cin.fail()) || (newKS.index_ks <= 0)) {
-			clear_buffer();
-			cout << "Введите корректные данные: ";
-		}
-
-		else {
-			break;
-		}
-	}
-}
-
-void enter_ks(ks& newKS) {
-	enter_name(newKS);
-	enter_amount(newKS);
-	enter_amount_work(newKS);
-	enter_index(newKS);
-
-	clearcmd();
-	cout << "КС добавлена\n";
-
-}
-
-
-void print_pipe(const pipe& newPipe) {
-	cout << "Труба\n" << "<<\n";
-	cout << "Диаметр: " << newPipe.diam_pipe << endl;
-	cout << "Длина: " << newPipe.len_pipe << endl;
-	cout << (newPipe.work_pipe ? "В работе" : "Не в работе") << endl << ">>\n";
-}
-
-void print_ks(const ks& newKS) {
-	cout << "КС\n" << "<<\n";
-	cout << "Имя: " << newKS.name_ks << endl;
-	cout << "Количество цехов: " << newKS.amount_ks << endl;
-	cout << "Количество цехов в работе: " << newKS.amount_work_ks << endl;
-	cout << "Эфективность: " << newKS.index_ks << endl << ">>\n";
-}
-
-void edit_pipe(pipe& newPipe) {
-	cout << (newPipe.work_pipe ? "Труба находится в работе" : "Труба не находится в работе") << endl;
-	cout << "В работе: ";
-	for (;;) {
-		cin >> newPipe.work_pipe;
-		if (cin.fail()) {
-			clear_buffer();
-			cout << "Введите корректные данные: ";
-		}
-		else {
-			clearcmd();
-			cout << "Труба успешно изменена!\n";
-			break;
-		}
-	}
-}
-
-void edit_ks(ks& newKS) {
-	cout << "Цехов всего: " << newKS.amount_ks << endl;
-	cout << "Цехов в работе: " << newKS.amount_work_ks << endl;
-	cout << "1. Увеличить количество цехов\n";
-	cout << "2. Уменьшить количество цехов\n";
-	cout << "0. Выход в главное меню\n";
-	cout << "Пункт номер: ";
-	for (;;) {
-		int enter;
-		cin >> enter;
-		if ((cin.fail()) || ((enter != 1) && (enter != 2) && (enter != 0))) {
-			clear_buffer();
-			cout << "Введите корректные данные: ";
-		}
-		else {
-			if ((enter == 1) && (newKS.amount_ks <= newKS.amount_work_ks)) {
-				clear_buffer();
-				cout << "Цехов в работе максимальное количество\n";
-				cout << "Введите корректные данные: ";
-			}
-			else if ((enter == 2) && (newKS.amount_work_ks <= 0)) {
-				clear_buffer();
-				cout << "Цехов в работе минимальное количество\n";
-				cout << "Введите корректные данные: ";
-			}
-			else if (enter == 1) {
-				newKS.amount_work_ks++;
-				clearcmd();
-				cout << "КС успешно изменена!\n";
-				break;
-			}
-			else if (enter == 2) {
-				newKS.amount_work_ks--;
-				clearcmd();
-				cout << "КС успешно изменена!\n";
-				break;
-			}
-			else {
-				clearcmd();
-				break;
-			}
-		}
-	}
-}
-
-void save_to_file(const pipe& newPipe, const ks& newKS) {
-	ofstream fout;
-	fout.open("output.txt");
-
-	if (!fout.is_open()) {
-		cout << "Не получилось открыть файл!";
-	}
-
-	else {
-		if ((newPipe.diam_pipe > 0) && (newPipe.len_pipe > 0) && ((newPipe.work_pipe == 1) || (newPipe.work_pipe == 0))) {
-
-			fout << newPipe.diam_pipe << endl;
-			fout << newPipe.len_pipe << endl;
-			fout << newPipe.work_pipe << endl;
-		}
-		else {
-			fout << 0 << endl << 0 << endl << 0 << endl;
-		}
-
-		if ((newKS.amount_ks >= 0) && (newKS.amount_work_ks >= 0) && (newKS.index_ks > 0) && (newKS.amount_work_ks <= newKS.amount_ks)) {
-			fout << newKS.name_ks << endl;
-			fout << newKS.amount_ks << endl;
-			fout << newKS.amount_work_ks << endl;
-			fout << newKS.amount_work_ks << endl;
-		}
-	}
-
-	fout.close();
-}
-
-void download_from_file(pipe& newPipe, ks& newKS, bool& bool_pipe, bool& bool_ks) {
-	ifstream fin;
-	string line;
-	bool_pipe = true;
-	bool_ks = true;
-
-	fin.open("output.txt");
-
-	if (!fin.is_open()) {
-		cout << "Не получилось открыть файл!";
 	}
 	else {
-		fin >> newPipe.diam_pipe;
-		fin >> newPipe.len_pipe;
-		fin >> newPipe.work_pipe;
+		cout << "Труб нет!" << endl;
+	}
+}
 
-		getline(fin, newKS.name_ks);
-		getline(fin, newKS.name_ks);
+void editPipe(map <unsigned int, Pipe>& pipes, int id) {
+	pipes[id].setInRepair(!pipes[id].getInRepair());
+}
 
-		fin >> newKS.amount_ks;
-		fin >> newKS.amount_work_ks;
-		fin >> newKS.index_ks;
-
-		if ((newPipe.diam_pipe > 0) && (newPipe.len_pipe > 0) && ((newPipe.work_pipe == 1) || (newPipe.work_pipe == 0))) {
-			bool_pipe = 1;
-		}
-		else {
-			bool_pipe = 0;
-		}
-		if ((newKS.amount_ks >= 0) && (newKS.amount_work_ks >= 0) && (newKS.index_ks > 0) && (newKS.amount_work_ks <= newKS.amount_ks)) {
-			bool_ks = 1;
-		}
-		else {
-			bool_ks = 0;
+void editPipes(map <unsigned int, Pipe>& pipes) {
+	if (!pipes.empty()) {
+		for (auto it : pipes) {
+			editPipe(pipes, it.first);
 		}
 	}
+	else {
+		cout << "Труб нет!" << endl;
+	}
+}
+
+void deletePipe(map <unsigned int, Pipe>& pipes) {
+	int num = pipes.size();
 	
-	cout << (bool_pipe ? "Труба загрузилась" : "Труба не загрузилaсь") << endl;
-	cout << (bool_ks ? "КС загрузилась" : "КС не загрузилaсь") << endl;
+	if (pipes.size() > 0) {
+		num = GetCorrectNumber("Id трубы которую хотите удалить: ", 1, num);
+		pipes.erase(num);
+		cout << "Удалено" << endl;
+	}
+}
+
+void addStation(map <unsigned int, Station>& stations, Station& newStation) {
+	cin.clear();
+	cin.ignore(1024, '\n');
+	string name;
+	cout << "Имя кс: ";
+	getline(cin, name);
+	newStation.setName(name);
+	newStation.setWorkshop(GetCorrectNumber("Количество цехов: ", 1, 2000000000));
+	newStation.setWorkshopInWork(GetCorrectNumber("Количество цехов работе: ", 1, 2000000000));
+	newStation.setEfficiency(GetCorrectNumber("Эффективность: ", 0.00001, 3.4E+38));
+	newStation.id++;
 	
-	fin.close();
+	stations.emplace(newStation.id, newStation);
+}
+
+void printStation(map <unsigned int, Station>& stations) {
+	int i;
+	if (!stations.empty()) {
+		for (auto it : stations) {
+			i = it.first;
+			cout << endl << "Имя: " << stations[i].getName() << endl;
+			cout << "Id: " << stations[i].id << endl;
+			cout << "Количество цехов: " << stations[i].getWorkdhop() << endl;
+			cout << "Количество цехов в работе: " << stations[i].getWorkshopInWork() << endl;
+			cout << "Эффективность: " << stations[i].getEfficiency() << endl << endl;
+		}
+	}
+	else {
+		cout << "Нет станций" << endl;
+	}
+}
+
+void deleteStation(map <unsigned int, Station>& stations) {
+	int num = stations.size();
+	if (stations.size() > 0) {
+		num = GetCorrectNumber("Id трубы которую хотите удалить: ", 1, num);
+		stations.erase(num);
+		cout << "Удалено" << endl;
+	}
+}
+
+void editStation(map <unsigned int, Station>& stations,int id) {
+	stations[id].setWorkshopInWork(GetCorrectNumber("Добавить количество станций: ", 1, stations[i].getWorkshop() - stations[i].getWorkshopInWork()));
 }
 
 int main()
 {
 	setlocale(LC_ALL, "Russian");
-	bool bool_pipe = false, bool_ks = false;
-	int numint;
-	pipe newPipe;
-	ks newKS;
+	map <unsigned int, Pipe> pipes;
+	map <unsigned int, Station> stations;
+	Pipe newPipe;
+	Station newStation;
+	
+
+
 	for (;;) {
 
-		printmenu();
-		cout << "Пункт номер: ";
-		numint = numbermenu();
-
-		clearcmd();
-
-		if (numint == 1) {
-			enter_pipe(newPipe);
-
-			bool_pipe = true;
-		}
-		else if (numint == 2) {
-			enter_ks(newKS);
-
-			bool_ks = true;
-		}
-		else if (numint == 3) {
-			if (bool_pipe) {
-				print_pipe(newPipe);
-			}
-			else {
-				cout << "Труба не найдена!\n";
-			}
-
-			if (bool_ks) {
-				print_ks(newKS);
-			}
-			else {
-				cout << "КС не найдена!\n";
-			}
-		}
-		else if (numint == 4) {
-			if (bool_pipe) {
-
-				edit_pipe(newPipe);
-			}
-			else {
-				cout << "Труба не найдена\n";
-			}
-		}
-		else if (numint == 5) {
-			if (bool_ks) {
-				edit_ks(newKS);
-			}
-			else {
-				cout << "КС не найдена\n";
-			}
-		}
-		else if (numint == 6) {
-			if (bool_ks || bool_pipe) {
-				save_to_file(newPipe, newKS);
-				cout << "Успешно сохранено\n";
-			}
-			else {
-				cout << "Данных недостаточно\n";
-			}
-		}
-		else if (numint == 7) {
-			download_from_file(newPipe, newKS, bool_pipe, bool_ks);
-		}
-		else {
+		printMenu();
+		
+		switch (GetCorrectNumber("Выберете действие: ",0, 7)) {
+		
+		case 0:
+		{
 			return 0;
 		}
+		case 1:
+		{
+			addPipe(pipes, newPipe);
+			break;
+		}
+		case 2:
+		{
+			addStation(stations, newStation);
+			break;
+		}
+		case 3:
+		{
+			printPipe(pipes);
+			printStation(stations);
+			break;
+		}
+		case 4:
+		{
+			cout << "1. Редактировать трубу по id." << endl << "2. Редактировать все" << endl << "0.Выход" << endl;
+			switch (GetCorrectNumber("Выберете действие: ", 0, 2))
+			{
+			case 1:
+			{
+				editPipe(pipes, GetCorrectNumber("", 0, 122222));
+				break;
+			}
+			case 2:
+			{
+				editPipes(pipes);
+				break;
+			}
+			default:
+				break;
+			}
+			break;
+		}
+		case 5:
+		{
+			editStation(stations, GetCorrectNumber("", 0, 122222));
+			break;
+		}
+		case 6:
+		{
+			break;
+		}
+		case 7:
+		{
+			break;
+		}
+		default:
+			break;
+
+		}
+
 	}
 }

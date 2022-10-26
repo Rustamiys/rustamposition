@@ -127,7 +127,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Pipe.cpp" />
     <ClCompile Include="Shaykhutdinov_R.cpp" />
+    <ClCompile Include="Station.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Pipe.h" />
+    <ClInclude Include="Station.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
