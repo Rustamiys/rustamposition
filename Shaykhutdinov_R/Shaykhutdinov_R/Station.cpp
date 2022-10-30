@@ -1,13 +1,14 @@
 #include "Station.h"
 
-int Station::id = 0;
+int Station::idS = 0;
 
 Station::Station()
 {
-	name = "0";
+	name = "";
 	workshop = 0;
 	workshopInWork = 0;
 	efficiency = 0;
+	id = 0;
 }
 
 std::string Station::getName() const
@@ -15,7 +16,7 @@ std::string Station::getName() const
 	return name;
 }
 
-int Station::getWorkdhop() const
+int Station::getWorkshop() const
 {
 	return workshop;
 }
@@ -28,6 +29,11 @@ int Station::getWorkshopInWork() const
 float Station::getEfficiency() const
 {
 	return efficiency;
+}
+
+unsigned int Station::getId() const
+{
+	return id;
 }
 
 void Station::setName(std::string name)
@@ -48,4 +54,9 @@ void Station::setWorkshopInWork(int workshopInWork)
 void Station::setEfficiency(float efficiency)
 {
 	this->efficiency = efficiency;
+}
+
+void Station::setId()
+{
+	id = idS;
 }

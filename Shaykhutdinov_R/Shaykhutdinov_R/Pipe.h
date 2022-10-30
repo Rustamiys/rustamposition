@@ -9,7 +9,7 @@ class Pipe {
 		float length;
 		float diametr;
 		bool inRepair;
-		
+		int unsigned id;
 
 	public:
 		Pipe();
@@ -18,12 +18,17 @@ class Pipe {
 		float getLength() const;
 		float getDiametr() const;
 		bool getInRepair() const;
-		static int id;
+		unsigned int getId() const;
+		static int idP;
 
 		void setName(std::string name);
 		void setLength(float length);
 		void setDiametr(float diametr);
 		void setInRepair(bool in_repair);
+		void setId();
+		void editPipe();
+		void saveToFile(std::ofstream& fout);
+		void downloadFromFile(std::ifstream& fin);
 };
 
 
