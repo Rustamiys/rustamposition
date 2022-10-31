@@ -6,24 +6,24 @@
 class Pipe {
 	private:
 		std::string name;
-		float length;
-		float diametr;
+		double length;
+		double diametr;
 		bool inRepair;
-		int unsigned id;
+		int id;
 
 	public:
 		Pipe();
 
 		std::string getName() const;
-		float getLength() const;
-		float getDiametr() const;
+		double getLength() const;
+		double getDiametr() const;
 		bool getInRepair() const;
-		unsigned int getId() const;
+		int getId() const;
 		static int idP;
 
 		void setName(std::string name);
-		void setLength(float length);
-		void setDiametr(float diametr);
+		void setLength(double length);
+		void setDiametr(double diametr);
 		void setInRepair(bool in_repair);
 		void setId();
 		void editPipe();

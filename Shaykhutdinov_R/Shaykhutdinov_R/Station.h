@@ -9,21 +9,23 @@ class Station
 		std::string name;
 		int workshop;
 		int workshopInWork;
-		float efficiency;
-		unsigned int id;
+		double efficiency;
+		int id;
 
 	public:
 		Station();
 		std::string getName() const;
 		int getWorkshop() const;
 		int getWorkshopInWork() const;
-		float getEfficiency() const;
-		unsigned int getId() const;
+		double getEfficiency() const;
+		int getId() const;
 	
 		void setName(std::string name);
 		void setWorkshop(int workshop);
 		void setWorkshopInWork(int workshopInWork);
-		void setEfficiency(float efficiency);
+		void setEfficiency(double efficiency);
 		void setId();
 		static int idS;
+		void saveToFile(std::ofstream& fout);
+		void downloadFromFile(std::ifstream& fin);
 };

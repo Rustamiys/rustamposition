@@ -11,7 +11,7 @@ void clearBuffer() {
 }
 
 template <typename T>
-T GetCorrectNumber(std::string text, T min, T max) {
+T GetCorrectNumber(string text, T min, T max) {
 	cout << text;
 	T number;
 	cin >> number;
@@ -30,13 +30,13 @@ T GetCorrectNumber(std::string text, T min, T max) {
 template <typename T>
 using FilterP = bool(*)(const Pipe& p, T parametr);
 template <typename T>
-vector<unsigned int> findPipeByFilter(unordered_map<unsigned int, Pipe>& pipes, FilterP<T> f, T parametr){
-	vector<unsigned int> result;
+vector<int> findPipeByFilter(unordered_map<int, Pipe>& pipes, FilterP<T> f, T parametr){
+	vector<int> result;
 	for (auto& it : pipes)
 	{
 		if (f(it.second, parametr))
 		{
-			result.push_back(it.second.getId());
+			result.push_back(it.first);
 		}
 	}
 	return result;
@@ -68,9 +68,9 @@ istream& operator >> (istream& in, Pipe& p) {
 	cout << "Имя трубы: ";
 	getline(cin, name);
 	p.setName(name);
-	p.setLength(GetCorrectNumber("Длина: ", 0.00001, 3.4E+38));
-	p.setDiametr(GetCorrectNumber("Диаметр: ", 0.00001, 3.4E+38));
-	p.setInRepair(GetCorrectNumber("В работе: ", 0, 1));
+	p.setLength(GetCorrectNumber("Длина: ", 0.1, 3.4E+38));
+	p.setDiametr(GetCorrectNumber("Диаметр: ", 0.1, 3.4E+38));
+	p.setInRepair((bool)GetCorrectNumber("В работе: ", 0, 1));
 	p.idP++;
 	p.setId();
 	return in;
@@ -92,9 +92,9 @@ istream& operator >> (istream& in, Station&s) {
 	cout << "Имя станции: ";
 	getline(cin, name);
 	s.setName(name);
-	s.setWorkshop(GetCorrectNumber("Длина: ", 1, 2000000000));
-	s.setWorkshopInWork(GetCorrectNumber("Количество цехов работе: ", 0, 2000000000));
-	s.setEfficiency(GetCorrectNumber("Эффективность: ", 0.00001, 3.4E+38));
+	s.setWorkshop(GetCorrectNumber("Количество цехов: ", 1, 2000000000));
+	s.setWorkshopInWork(GetCorrectNumber("Количество цехов работе: ", 0, s.getWorkshop()));
+	s.setEfficiency(GetCorrectNumber("Эффективность: ", 0.1, 3.4E+38));
 	s.idS++;
 	s.setId();
 	return in;
@@ -103,11 +103,11 @@ istream& operator >> (istream& in, Station&s) {
 template <typename T>
 using FilterS = bool(*)(Station& s, T parametr);
 template <typename T>
-vector <unsigned int> findStationByFilter(unordered_map<unsigned int, Station>& stations, FilterS<T> f, T parametr) {
-	vector <unsigned int> result;
+vector <int> findStationByFilter(unordered_map<int, Station>& stations, FilterS<T> f, T parametr) {
+	vector <int> result;
 	for (auto& it : stations) {
 		if (f(it.second, parametr)) {
-			result.push_back(it.second);
+			result.push_back(it.first);
 		}
 	}
 	return result;
@@ -117,8 +117,8 @@ bool checkStationByName(Station& s, string parametr) {
 	return s.getName() == parametr;
 }
 
-bool checkStationByPercent(Station& s, float parametr) {
-	return parametr/100.0 == 1.0 - (float)s.getWorkshopInWork()/(float)s.getWorkshop();
+bool checkStationByPercent(Station& s, double parametr) {
+	return parametr/100.0 == 1.0 - (double)s.getWorkshopInWork()/(double)s.getWorkshop();
 }
 
 void printMenu() {
@@ -136,11 +136,11 @@ void printMenu() {
 		 << "0. Выход." << endl;
 }
 
-void editPipe(unordered_map <unsigned int, Pipe>& pipes, int id) {
+void editPipe(unordered_map <int, Pipe>& pipes, int id) {
 	pipes[id].setInRepair(!pipes[id].getInRepair());
 }
 
-void editPipes(unordered_map <unsigned int, Pipe>& pipes) {
+void editPipes(unordered_map <int, Pipe>& pipes) {
 	if (!pipes.empty()) {
 		for (auto& it : pipes) {
 			editPipe(pipes, it.first);
@@ -151,7 +151,7 @@ void editPipes(unordered_map <unsigned int, Pipe>& pipes) {
 	}
 }
 
-void deletePipe(unordered_map <unsigned int, Pipe>& pipes) {
+void deletePipe(unordered_map <int, Pipe>& pipes) {
 	if (pipes.size() > 0) {
 		int num = GetCorrectNumber("Id трубы которую хотите удалить: ", 1, Pipe::idP);
 		for (auto& it : pipes) {
@@ -171,7 +171,7 @@ void deletePipe(unordered_map <unsigned int, Pipe>& pipes) {
 	}
 }
 
-void deleteStation(unordered_map <unsigned int, Station>& stations) {
+void deleteStation(unordered_map <int, Station>& stations) {
 	if (stations.size() > 0) {
 		int num = GetCorrectNumber("Id станции которую хотите удалить: ", 1, Station::idS);
 		for (auto& it : stations) {
@@ -193,7 +193,7 @@ void deleteStation(unordered_map <unsigned int, Station>& stations) {
 
 
 
-void editStation(unordered_map <unsigned int, Station>& stations,int id) {
+void editStation(unordered_map <int, Station>& stations,int id) {
 	cout << "Всего цехов" << stations[id].getWorkshop() << endl << "" << stations[id].getWorkshopInWork() << endl;
 	cout << "1. Запуск цехов" << endl << "2. Отключение цехов" << endl;
 	switch (GetCorrectNumber("Выберете действие: ", 1, 2))
@@ -209,35 +209,42 @@ void editStation(unordered_map <unsigned int, Station>& stations,int id) {
 	}
 }
 
-int main()
-{
+int main() {
+
 	setlocale(LC_ALL, "Russian");
-	unordered_map <unsigned int, Pipe> pipes;
-	unordered_map <unsigned int, Station> stations;
+	unordered_map <int, Pipe> pipes;
+	unordered_map <int, Station> stations;
 	Pipe p;
 	Station s;
 
 	for (;;) {
 
 		printMenu();
-		
+
 		switch (GetCorrectNumber("Выберете действие: ", 0, 11)) {
 
 		case 0:
+		{
 			return 0;
+		}
 
 		case 1:
+		{
 			cin >> p;
 			pipes.emplace(Pipe::idP, p);
 			break;
+		}
 
 		case 2:
+		{
 			cin >> s;
 			stations.emplace(Station::idS, s);
 			break;
+		}
 
 		case 3:
-			if (pipes.size() > 0) {
+		{
+			if (!pipes.empty()) {
 				for (auto& it : pipes) {
 					cout << pipes[it.first];
 				}
@@ -246,7 +253,7 @@ int main()
 				cout << "Труб нет" << endl;
 			}
 
-			if (stations.size() > 0) {
+			if (!stations.empty()) {
 				for (auto& it : stations) {
 					cout << stations[it.first];
 				}
@@ -254,81 +261,121 @@ int main()
 			else {
 				cout << "Станций нет" << endl;
 			}
-			
+
 			break;
+		}
 
 		case 4:
-			cout << "1. Редактировать трубу по id." << endl << "2. Редактировать по статусу \"в работе\"."  << endl <<"3. Редактировать по названию." <<endl<<"4. Редактировать все." << "0.Выход" << endl;
+		{
+			cout << "1. Редактировать трубу по id." << endl << "2. Редактировать все." << "0.Выход" << endl;
 			switch (GetCorrectNumber("Выберете действие: ", 0, 2))
 			{
 			case 0:
+			{
 				break;
+			}
 
 			case 1:
-				editPipe(pipes, GetCorrectNumber("", 1, Pipe::idP));
+			{
+				editPipe(pipes, GetCorrectNumber("Введите id трубы: ", 1, Pipe::idP));
 				break;
+			}
 
 			case 2:
+			{
 				editPipes(pipes);
 				break;
-
-			case 3:
-			{
-				string name;
-				clearBuffer();
-				cout << "Название: ";
-				getline(cin, name);
-				for (int i : findPipeByFilter(pipes, checkPipeByName, name))
-					editPipe(pipes, i);
-
-				break;
 			}
-
-			case 4:
-				for (int i : findPipeByFilter(pipes, checkPipeByInRepair, (bool)GetCorrectNumber("B работе: ", 0, 1)))
-					editPipe(pipes, i);
-				break;
 			}
-
+			break;
+		}
 		case 5:
-			if (stations.size() > 0) {
+		{
+			if (!stations.empty()) {
 				editStation(stations, GetCorrectNumber("Выберете станцию: ", 1, Station::idS));
 			}
 			else {
 				cout << "Станций не найдено" << endl;
 			}
 			break;
-
+		}
 		case 6:
 		{
 			string name;
 			ofstream fout;
-			cout << "Введите имя: ";
-			cin.sync();
+			clearBuffer();
+			cout << "Введите имя Файла: ";
 			getline(cin, name);
-			fout.open(name.c_str());
-			
+			fout.open(name);
+
 
 			if (fout.is_open()) {
 				for (auto& it : pipes) {
 					it.second.saveToFile(fout);
 				}
+
+				for (auto& it : stations) {
+					it.second.saveToFile(fout);
+				}
+				cout << "Успешно сохранено" << endl;
+				fout.close();
 			}
 			else {
-				cout << "Не получилось открыть файл.";
+				cout << "Не получилось открыть файл." << endl;
 			}
-			fout.close();
+			
 			break;
 		}
 		case 7:
-			
+		{
+			string name;
+			ifstream fin;
+			clearBuffer();
+			cout << "Введите имя Файла: ";
+			getline(cin, name);
+			fin.open(name);
+
+			if (fin.is_open()) {
+				bool some = false;
+				for (;;) {
+					char ch;
+					some = true;
+					fin >> ch;
+					if (ch == 'p') {
+						Pipe::idP++;
+						p.downloadFromFile(fin);
+						p.setId();
+						pipes.emplace(p.getId(), p);
+					}
+					else {
+						Station::idS++;
+						s.downloadFromFile(fin);
+						s.setId();
+						stations.emplace(s.getId(), s);
+					}
+					
+					if (fin.eof()) break;
+
+				}
+				cout << ((some) ? "Успешно загрузилось" : "Файл пустой") << endl;
+				fin.close();
+			}
+			else {
+				cout << "Не получилось открыть файл." << endl;
+			}
 			break;
+		}
 
 		case 8:
 		{
-			vector <unsigned int> foundPipes;
-			cout << "1. Bыбрать трубу по названию." << endl << "2. Bыбрать трубу по статусу \"в работе\"." << endl;
+			vector <int> foundPipes;
+			cout << "1. Bыбрать трубу по названию." << endl << "2. Bыбрать трубу по статусу \"в работе\"." << endl << "0. Выход." << endl;
 			switch (GetCorrectNumber("выберете действие: ", 1, 2)) {
+
+			case 0:
+			{
+				break;
+			}
 
 			case 1:
 			{
@@ -337,9 +384,10 @@ int main()
 				cout << "Название: ";
 				getline(cin, name);
 				foundPipes = findPipeByFilter(pipes, checkPipeByName, name);
-			
+
 				break;
 			}
+
 			case 2:
 			{
 				foundPipes = findPipeByFilter(pipes, checkPipeByInRepair, (bool)GetCorrectNumber("B работе: ", 0, 1));
@@ -347,20 +395,39 @@ int main()
 				break;
 			}
 			}
+
 			if (!foundPipes.empty()) {
-				for (unsigned int i : foundPipes)
+				for (int i : foundPipes)
 					cout << pipes[i];
+				cout << "1. Редактировать." << endl << "2. Удалить." << endl << "0. Выход." << endl << endl;
+				switch (GetCorrectNumber("Выберете действие", 0, 2))
+				{
+				case 0:
+					break;
+				case 1:
+					for (int i : foundPipes)
+						editPipe(pipes, i);
+				case 2:
+					for (int i : foundPipes)
+						pipes.erase(i);
+				}
+
 			}
 			else {
-				cout << "Такой трубы не найдено " << endl;
+				cout << "Таких труб нет." << endl;
 			}
 			break;
 		}
 		case 9:
 		{
-			vector <unsigned int> foundStations;
-			cout << "1. Bыбрать кс по названию." << endl << "2. Bыбрать кс проценту незадействованных цехов." << endl;
+			vector <int> foundStations;
+			cout << "1. Bыбрать кс по названию." << endl << "2. Bыбрать кс проценту незадействованных цехов." << endl << "0. Выход." << endl;
 			switch (GetCorrectNumber("Bыберете действие: ", 1, 2)) {
+
+			case 0:
+			{
+				break;
+			}
 
 			case 1:
 			{
@@ -372,31 +439,50 @@ int main()
 
 				break;
 			}
+
 			case 2:
 			{
-				foundStations = findStationByFilter(stations, checkStationByPercent, (float)GetCorrectNumber("Процент: ", 0.0, 100.0));
+				foundStations = findStationByFilter(stations, checkStationByPercent, GetCorrectNumber("Процент: ", 0.0, 100.0));
 
 				break;
 			}
 			}
+
 			if (!foundStations.empty()) {
-				for (unsigned int i : foundStations)
+				for (int i : foundStations)
 					cout << stations[i];
+				cout << "1. Редактировать." << endl << "2. Удалить." << endl << "0. Выход." << endl << endl;
+				switch (GetCorrectNumber("Выберете действие", 0, 2))
+				{
+				case 0:
+					break;
+				case 1:
+					for (int i : foundStations)
+						editStation(stations, i);
+				case 2:
+					for (int i : foundStations)
+						stations.erase(i);
+				}
 			}
 			else {
-				cout << "Такой КС не найдено " << endl;
+				cout << "Таких КС нет." << endl;
 			}
 			break;
 		}
 
 		case 10:
+		{
 			deletePipe(pipes);
 			break;
+		}
 
 		case 11:
+		{
 			deleteStation(stations);
 			break;
+		}
 
 		}
 	}
 }
+

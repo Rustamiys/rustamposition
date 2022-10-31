@@ -16,11 +16,11 @@ std::string Pipe::getName() const
 }
 
 
-float Pipe::getLength() const {
+double Pipe::getLength() const {
 	return length;
 }
 
-float Pipe::getDiametr() const {
+double Pipe::getDiametr() const {
 	return diametr;
 }
 
@@ -29,7 +29,7 @@ bool Pipe::getInRepair() const
 	return inRepair;
 }
 
-unsigned int Pipe::getId() const
+int Pipe::getId() const
 {
 	return id;
 }
@@ -40,11 +40,11 @@ void Pipe::setName(std::string name)
 	this->name = name;
 }
 
-void Pipe::setLength(float length) {
+void Pipe::setLength(double length) {
 	this->length = length;
 }
 
-void Pipe::setDiametr(float diametr) {
+void Pipe::setDiametr(double diametr) {
 	this->diametr = diametr;
 }
 
@@ -64,14 +64,16 @@ void Pipe::editPipe()
 void Pipe::saveToFile(std::ofstream& fout)
 {
 	fout << "p" << std::endl
-		 << name << std::endl
-		 << length << std::endl
-		 << diametr << std::endl
-		 << inRepair << std::endl;
+		<< name << std::endl
+		<< length << std::endl
+		<< diametr << std::endl
+		<< inRepair << std::endl;
 }
 
 void Pipe::downloadFromFile(std::ifstream& fin)
 {
-	fin >> name >> length >> diametr >> inRepair;
+	fin >> std::ws;
+	getline(fin, name);
+	fin >> length >> diametr >> inRepair;
 }
 

@@ -26,12 +26,12 @@ int Station::getWorkshopInWork() const
 	return workshopInWork;
 }
 
-float Station::getEfficiency() const
+double Station::getEfficiency() const
 {
 	return efficiency;
 }
 
-unsigned int Station::getId() const
+int Station::getId() const
 {
 	return id;
 }
@@ -51,7 +51,7 @@ void Station::setWorkshopInWork(int workshopInWork)
 	this->workshopInWork = workshopInWork;
 }
 
-void Station::setEfficiency(float efficiency)
+void Station::setEfficiency(double efficiency)
 {
 	this->efficiency = efficiency;
 }
@@ -59,4 +59,20 @@ void Station::setEfficiency(float efficiency)
 void Station::setId()
 {
 	id = idS;
+}
+
+void Station::saveToFile(std::ofstream& fout)
+{
+	fout << "s" << std::endl
+		<< name << std::endl
+		<< workshop << std::endl
+		<< workshopInWork << std::endl
+		<< efficiency << std::endl;
+}
+
+void Station::downloadFromFile(std::ifstream& fin)
+{
+	fin >> std::ws;
+	getline(fin, name);
+	fin >> workshop >> workshopInWork >> efficiency;
 }
