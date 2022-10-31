@@ -337,7 +337,7 @@ int main() {
 
 			if (fin.is_open()) {
 				bool some = false;
-				for (;;) {
+				while(!fin.eof()) {
 					char ch;
 					some = true;
 					fin >> ch;
@@ -347,15 +347,13 @@ int main() {
 						p.setId();
 						pipes.emplace(p.getId(), p);
 					}
-					else {
+					if (ch == 's') {
 						Station::idS++;
 						s.downloadFromFile(fin);
 						s.setId();
 						stations.emplace(s.getId(), s);
 					}
-					
-					if (fin.eof()) break;
-
+					ch = 'N';
 				}
 				cout << ((some) ? "Успешно загрузилось" : "Файл пустой") << endl;
 				fin.close();
@@ -404,12 +402,16 @@ int main() {
 				{
 				case 0:
 					break;
+
 				case 1:
 					for (int i : foundPipes)
 						editPipe(pipes, i);
+					break;
+
 				case 2:
 					for (int i : foundPipes)
 						pipes.erase(i);
+					break;
 				}
 
 			}
