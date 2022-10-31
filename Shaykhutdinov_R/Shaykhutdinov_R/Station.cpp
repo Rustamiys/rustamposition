@@ -3,13 +3,7 @@
 int Station::idS = 0;
 
 Station::Station()
-{
-	name = "";
-	workshop = 0;
-	workshopInWork = 0;
-	efficiency = 0;
-	id = 0;
-}
+{}
 
 std::string Station::getName() const
 {

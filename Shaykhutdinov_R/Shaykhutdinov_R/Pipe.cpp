@@ -2,19 +2,12 @@
 
 int Pipe::idP = 0;
 
-Pipe::Pipe(){
-	name = "";
-	length = 0;
-	diametr = 0;
-	inRepair = 0;
-	id = 0;
-}
+Pipe::Pipe(){}
 
 std::string Pipe::getName() const
 {
 	return name;
 }
-
 
 double Pipe::getLength() const {
 	return length;
