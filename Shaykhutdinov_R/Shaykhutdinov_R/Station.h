@@ -20,12 +20,10 @@ class Station
 		double getEfficiency() const;
 		int getId() const;
 	
-		void setName(std::string name);
-		void setWorkshop(int workshop);
-		void setWorkshopInWork(int workshopInWork);
-		void setEfficiency(double efficiency);
-		void setId();
 		static int idS;
+		void setWorkshopInWork(int workshopInWork);
 		void saveToFile(std::ofstream& fout);
 		void downloadFromFile(std::ifstream& fin);
+		friend std::istream& operator >> (std::istream& in, Station & s);
+		friend std::ostream& operator << (std::ostream& out, const Station& s);
 };

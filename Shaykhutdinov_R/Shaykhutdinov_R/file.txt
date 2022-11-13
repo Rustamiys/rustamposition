@@ -1,0 +1,48 @@
+p
+pipe monstr
+1
+100000
+222222
+1
+p
+pipe Afganec
+2
+12
+2
+0
+p
+chechya kruto
+3
+8.21038e+12
+13213.3
+1
+p
+ququ zaaz
+4
+22321
+12
+1
+p
+emfj ukutuchi
+5
+22323.7
+546
+1
+p
+okno tflf><><
+6
+222
+1
+1
+s
+sos o sos
+1
+12
+11
+6
+s
+oluk
+2
+123
+123
+100
