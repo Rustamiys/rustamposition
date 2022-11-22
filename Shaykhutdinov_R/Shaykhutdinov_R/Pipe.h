@@ -18,8 +18,7 @@ class Pipe {
 		int getId() const;
 		static int idP;
 
-		void setInRepair(bool in_repair);
-		void editPipe();
+		void editPipe(bool inRepair);
 		void saveToFile(std::ofstream& fout);
 		void downloadFromFile(std::ifstream& fin);
 		friend std::istream& operator >> (std::istream& in, Pipe& p);

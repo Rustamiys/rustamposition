@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{856b3742-c161-4366-9f34-84b91e629fb2}</ProjectGuid>
-    <RootNamespace>ShaykhutdinovR</RootNamespace>
+    <ProjectGuid>{a41ce50e-a4d6-46bd-97e1-07b0ef0b3ec5}</ProjectGuid>
+    <RootNamespace>SuffixArray</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -104,7 +104,6 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -128,17 +127,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="GTS.cpp" />
-    <ClCompile Include="Pipe.cpp" />
-    <ClCompile Include="Shaykhutdinov_R.cpp" />
-    <ClCompile Include="Station.cpp" />
-    <ClCompile Include="Utils.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="SuffixArray.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="GTS.h" />
-    <ClInclude Include="Pipe.h" />
-    <ClInclude Include="Station.h" />
-    <ClInclude Include="Utils.h" />
+    <ClInclude Include="SuffixArray.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

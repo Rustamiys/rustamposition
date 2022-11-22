@@ -48,9 +48,24 @@ set<int> findByFilter(unordered_map<int, T1>& objects, Filter<T1, T2> f, T2 para
 
 template <typename T>
 bool checkByName(const T& obj, string parametr) {
+	size_t q = obj.getName().find(parametr);
 	return obj.getName().find(parametr) != string::npos;
 }
 
 bool checkPipeByInRepair(const Pipe& p, bool parametr);
 
 bool checkByPercent(const Station& s, double parametr);
+
+template <typename T>
+void deleteObject(unordered_map <int, T>& obj, int id) {
+	obj.erase(id);
+}
+
+template <typename T>
+void deleteObject(unordered_map <int, T>& obj) {
+	obj.clear();
+}
+
+void downloadFromFile(unordered_map<int, Pipe>& pipes, unordered_map<int, Station>& stations);
+
+void saveToFile(unordered_map<int, Pipe>& pipes, unordered_map<int, Station>& stations);

@@ -29,14 +29,11 @@ int Pipe::getId() const
 	return id;
 }
 
-void Pipe::setInRepair(bool inRepair) {
+void Pipe::editPipe(bool inRepair)
+{
 	this->inRepair = inRepair;
 }
 
-void Pipe::editPipe()
-{
-	inRepair = !inRepair;
-}
 
 void Pipe::saveToFile(ofstream& fout)
 {
