@@ -127,11 +127,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="SuffixArray.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="SuffixArray.h" />
+    <ClCompile Include="suffix_array_by_Shaykhutdinov.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
