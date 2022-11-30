@@ -28,6 +28,10 @@ bool checkByPercent(const Station& s, double parametr) {
 	return parametr >= 100 * (1 - (double)s.getWorkshopInWork() / (double)s.getWorkshop());
 }
 
+bool checkPipeByDiametr(const Pipe& p, double parametr) {
+	return parametr == p.getDiametr();
+}
+
 set<int> GetIdByUserinput() {
 	set <int> vvodId;
 	string id, name;

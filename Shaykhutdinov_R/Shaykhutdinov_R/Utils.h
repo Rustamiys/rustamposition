@@ -17,8 +17,10 @@ set<int> GetIdByUserinput();
 template <typename T>
 T GetCorrectNumber(string text, T min, T max) {
 	cout << text;
+	
 	T number;
 	cin >> number;
+	if (max <= min) return max;
 	for (;;) {
 		if (cin.fail() || number < min || number > max) {
 			clearBuffer();
@@ -53,6 +55,8 @@ bool checkByName(const T& obj, string parametr) {
 }
 
 bool checkPipeByInRepair(const Pipe& p, bool parametr);
+
+bool checkPipeByDiametr(const Pipe& p, double parametr);
 
 bool checkByPercent(const Station& s, double parametr);
 

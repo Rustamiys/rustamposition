@@ -12,6 +12,8 @@ Pipe::Pipe(){
 	length = 0;
 	diametr = 0;
 	inRepair = 0;
+	inputStation = 0;
+	outputStation = 0;
 }
 
 string Pipe::getName() const
@@ -29,11 +31,37 @@ int Pipe::getId() const
 	return id;
 }
 
+double Pipe::getDiametr() const 
+{
+	return diametr;
+}
+
+int Pipe::getInputStation() const
+{
+	return inputStation;
+}
+
+int Pipe::getOutputStation() const
+{
+	return outputStation;
+}
+
 void Pipe::editPipe(bool inRepair)
 {
 	this->inRepair = inRepair;
 }
 
+void Pipe::setDiametr(double diametr) {
+	this->diametr = diametr;
+}
+
+void Pipe::setInputStation(int id) {
+	inputStation = id;
+}
+
+void Pipe::setOutputStation(int id) {
+	outputStation = id;
+}
 
 void Pipe::saveToFile(ofstream& fout)
 {
@@ -42,14 +70,16 @@ void Pipe::saveToFile(ofstream& fout)
 		<< id << endl
 		<< length << endl
 		<< diametr << endl
-		<< inRepair << endl;
+		<< inRepair << endl
+		<< inputStation << endl
+		<< outputStation << endl;
 }
 
 void Pipe::downloadFromFile(ifstream& fin)
 {
 	fin >> ws;
 	getline(fin, name);
-	fin >> id >> length >> diametr >> inRepair;
+	fin >> id >> length >> diametr >> inRepair >> inputStation >> outputStation;
 }
 
 ostream& operator << (ostream& out, const Pipe& p) {
@@ -73,3 +103,4 @@ istream& operator >> (istream& in, Pipe& p) {
 	p.inRepair = (bool)GetCorrectNumber("В работе: ", 0, 1);
 	return in;
 }
+

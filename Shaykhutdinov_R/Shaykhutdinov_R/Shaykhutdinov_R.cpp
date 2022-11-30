@@ -80,7 +80,7 @@ void editPipeByFilter(unordered_map<int, Pipe>& pipes, set <int> foundPipes) {
 			set <int> foundP = selectPipesByFilter(pipes);
 			for (int i : foundP)
 				if (foundPipes.contains(i)) cout << pipes[i];
-
+			
 			cout << "1. Редактировать все." << endl << "2. По вводу." << endl << "0. Выход." << endl;
 
 			switch (GetCorrectNumber("Выберете действие: ", 0, 2))
@@ -157,7 +157,6 @@ void editPipeByFilter(unordered_map<int, Pipe>& pipes, set <int> foundPipes) {
 	else {
 		cout << "Таких труб нет." << endl;
 	}
-	
 }
 
 void selectStation(unordered_map <int, Station>& stations) {
@@ -198,9 +197,11 @@ void selectStation(unordered_map <int, Station>& stations) {
 		case 1:
 			for (int i : foundStations)
 				editStation(stations, i);
+			break;
 		case 2:
 			for (int i : foundStations)
 				stations.erase(i);
+			break;
 		}
 	}
 	else {
@@ -219,7 +220,7 @@ int main() {
 
 		printMenu();
 
-		switch (GetCorrectNumber("Выберете действие: ", 0, 11)) {
+		switch (GetCorrectNumber("Выберете действие: ", 0, 13)) {
 
 		case 0:
 			return 0;
@@ -269,6 +270,8 @@ int main() {
 
 		case 7:
 			downloadFromFile(pipes, stations);
+			for (auto& it : pipes)
+				if (it.second.getInputStation() != 0) gts.IncludeToGraph(it.second);
 			break;
 
 		case 8:
@@ -301,7 +304,16 @@ int main() {
 				cout << "Станций нет" << endl;
 			}
 			break;
+		case 12:
+			gts.addGTS(pipes, stations);
+
+			break;
+		case 13:
+			gts.topological_sort();
+			
+			break;
 		}
+
 	}
 }
 
