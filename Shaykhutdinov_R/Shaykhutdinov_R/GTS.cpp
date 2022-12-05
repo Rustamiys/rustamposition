@@ -51,9 +51,10 @@ void GTS::addGTS(unordered_map <int, Pipe>& pipes, unordered_map <int, Station>&
 		p.setDiametr(d);
 		q = p.getId();
 		pipes[q].setInputStation(idStationIn);
-		pipes[q].setOutputStation(idStationIn);
+		pipes[q].setOutputStation(idStationOut);
 		IncludeToGraph(pipes[q]);
 	}
+	cout << "Добавлено в ГТС" << endl;
 }
 
 
@@ -103,21 +104,21 @@ void GTS::IncludeToGraph(Pipe p) {
 //	ans.push_back(v);
 //}
 
-void GTS::dfs1(int v, int p = -1){    //p - прямой предок
-	used[v] = 1;
-
-	for (int u : graph[v]) {
-		if (used[u] == 0) {
-			dfs1(u, v);
-		}
-		else if (u == p) {
-			cycl.emplace(-1);
-			return;
-		}
-	}
-	cycl.emplace(1);
-	ans.push_back(v);
-}
+//void GTS::dfs1(int v, int p = -1){    //p - прямой предок
+//	used[v] = 1;
+//
+//	for (int u : graph[v]) {
+//		if (used[u] == 0) {
+//			dfs1(u, v);
+//		}
+//		else if (u == p) {
+//			cycl.emplace(-1);
+//			return;
+//		}
+//	}
+//	cycl.emplace(1);
+//	ans.push_back(v);
+//}
 
 void GTS::dfs(int v) {
 	used[v] = 1;
@@ -125,11 +126,12 @@ void GTS::dfs(int v) {
 		if (used[i] == 0)
 			dfs(i);
 		else if (used[i] == 1) {
-			cout << "cycl" << endl;
+			cycl.emplace(-1);
 			return;
 		}
 	}
 	ans.push_back(v);
+	cycl.emplace(1);
 	used[v] = -1;
 }
 
@@ -154,10 +156,15 @@ void GTS::topological_sort() {
 		if (!used[i]) dfs(i);
 	}
 
+	if (cycl.size() == 2) {
+		cout << "Обнаружен цикл" << endl;
+		return;
+	}
+
 	reverse(ans.begin(), ans.end());
 	used.clear();
 	for (int i : ans) {
 		cout << i << " -> ";
 	}
-	cout << endl;
+	cout << "sorted" << endl;
 }
