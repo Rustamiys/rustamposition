@@ -17,7 +17,8 @@ class GTS
 		unordered_map<int, int> used;
 		
 		vector<int> ans;
-
+		set<int> cycl;
+		vector<int> cl;
 	public:
 		GTS();
 		static int idG;
@@ -25,7 +26,7 @@ class GTS
 		void IncludeToGraph(Pipe p);
 		vector<int> tsort();
 		void dfs(int v);
-		//void dfs1(int v, int p);
+		void dfs1(int v, int p);
 		void topological_sort();
 };
 

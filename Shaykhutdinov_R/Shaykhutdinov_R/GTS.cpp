@@ -1,4 +1,4 @@
-#include "GTS.h"
+п»ї#include "GTS.h"
 
 GTS::GTS() {
 
@@ -6,15 +6,15 @@ GTS::GTS() {
 
 void GTS::addGTS(unordered_map <int, Pipe>& pipes, unordered_map <int, Station>& stations) {
 	
-	int idStationIn = GetCorrectNumber("ID станции входа: ", 1, Station::idS);
-	int idStationOut = GetCorrectNumber("ID станции выхода: ", 1, Station::idS);
+	int idStationIn = GetCorrectNumber("ID СЃС‚Р°РЅС†РёРё РІС…РѕРґР°: ", 1, Station::idS);
+	int idStationOut = GetCorrectNumber("ID СЃС‚Р°РЅС†РёРё РІС‹С…РѕРґР°: ", 1, Station::idS);
 	if ((idStationIn == idStationOut) || (!stations.contains(idStationOut)) || (!stations.contains(idStationIn))) {
 		cout << "ERROR" << endl;
 		return;
 	}
 	double d;
-	cout << "Выберете диаметр(1 - 500; 2 - 700; 3 - 1400)" << endl;
-	switch (GetCorrectNumber("Диаметр: ", 1, 3))
+	cout << "Р’С‹Р±РµСЂРµС‚Рµ РґРёР°РјРµС‚СЂ(1 - 500; 2 - 700; 3 - 1400)" << endl;
+	switch (GetCorrectNumber("Р”РёР°РјРµС‚СЂ: ", 1, 3))
 	{
 		case 1:
 		{
@@ -87,35 +87,52 @@ void GTS::IncludeToGraph(Pipe p) {
 //	}
 //	for (int j : used)
 //	
-//	if (q == 0) cout << "Обнаружен цикл" << endl;
+//	if (q == 0) cout << "РћР±РЅР°СЂСѓР¶РµРЅ С†РёРєР»" << endl;
 //	
 //
 //	return vector<int>();
 //}
 
 
-void GTS::dfs(int v) {
-	used[v] = true;
-	for (int i : graph[v]) {
-		if (!used[i])
-			dfs(i);
+//void GTS::dfs(int v) {
+//	used[v] = true;
+//	for (int i : graph[v]) {
+//		if (!used[i])
+//			dfs(i);
+//	}
+//	ans.push_back(v);
+//}
+
+void GTS::dfs1(int v, int p = -1){    //p - РїСЂСЏРјРѕР№ РїСЂРµРґРѕРє
+	used[v] = 1;
+
+	for (int u : graph[v]) {
+		if (used[u] == 0) {
+			dfs1(u, v);
+		}
+		else if (u == p) {
+			cycl.emplace(-1);
+			return;
+		}
 	}
+	cycl.emplace(1);
 	ans.push_back(v);
 }
 
-//void GTS::dfs1(int v, int p = -1){    //p - прямой предок
-//	used[v] = true;
-//
-//	for (int u : graph[v]) {
-//		if (!used[u]) {
-//			dfs1(u, v);
-//		}
-//		else if (u != p) {
-//			cout << "Graph has cycles.";
-//			exit(0);
-//		}
-//	}
-//}
+void GTS::dfs(int v) {
+	used[v] = 1;
+	for (int i : graph[v]) {
+		if (used[i] == 0)
+			dfs(i);
+		else if (used[i] == 1) {
+			cout << "cycl" << endl;
+			return;
+		}
+	}
+	ans.push_back(v);
+	used[v] = -1;
+}
+
 
 void GTS::topological_sort() {
 	int j = 0;
@@ -131,8 +148,7 @@ void GTS::topological_sort() {
 		j++;
 	}
 
-	ans.clear();
-	
+	ans.clear();	
 
 	for (int i : idks) {
 		if (!used[i]) dfs(i);
