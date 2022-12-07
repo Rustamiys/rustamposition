@@ -169,7 +169,7 @@ vector<int> find_index_by_suffix_array(string s, string p) {
 
     }
 
-    /*res.push_back(suf[l]);
+    res.push_back(suf[l]);
     for (int i = l; i <= s.size(); i++) {
         if (lcp[i] >= p.size()) {
             res.push_back(suf[i+1]);
@@ -177,7 +177,7 @@ vector<int> find_index_by_suffix_array(string s, string p) {
         else {
             break;
         }
-    }*/
+    }
 
     for (int i = l; i < l1; i++)
         res.push_back(suf[i]);
@@ -196,7 +196,7 @@ vector<int> find_index_by_suffix_array(string s, string p) {
 int main() {
     ifstream fin;
 
-    fin.open("DataSet1.txt", ios::in);
+    fin.open("DataSet.txt", ios::in);
     string text;
 
     while (!fin.eof())
@@ -233,6 +233,8 @@ int main() {
     cout << (br == suf? "Equal " : "not equal ") << endl;
 
     cout << "Size " << text.size();
+
+
     return 0;
 }
 
