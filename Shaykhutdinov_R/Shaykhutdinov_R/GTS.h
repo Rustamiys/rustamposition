@@ -9,24 +9,21 @@
 class GTS
 {
 	private:
-		set<int> idSelectedPipes;
-		int id;
 		unordered_map<int, unordered_set<int>> graph;
 		unordered_set<int> idks;
-		
+
 		unordered_map<int, int> used;
-		
 		vector<int> ans;
 		set<int> cycl;
-		vector<int> cl;
+		
 	public:
 		GTS();
-		static int idG;
 		void addGTS(unordered_map <int, Pipe>& pipes, unordered_map <int, Station>& stations);
+		void deleteP(unordered_map<int, Pipe>& pipes);
 		void IncludeToGraph(Pipe p);
-		vector<int> tsort();
+		void deleteAll();
+		void print();
 		void dfs(int v);
-		void dfs1(int v, int p);
 		void topological_sort();
 };
 

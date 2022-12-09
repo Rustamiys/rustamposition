@@ -17,8 +17,8 @@ void printMenu() {
 		<< "9. Поиск КС по фильтру." << endl
 		<< "10. Удалить трубу." << endl
 		<< "11. Удалить станцию." << endl
-		<< "12. Добавить в ГТС." << endl
-		<< "13. Топологическая сортировка." << endl
+		<< "12. Соединение труб и КС в газотранспортную сеть" << endl
+		<< "13. Топологическая сортировка" << endl
 		<< "0. Выход." << endl;
 }
 
@@ -90,7 +90,7 @@ void downloadFromFile(unordered_map<int, Pipe>& pipes, unordered_map<int, Statio
 
 	clearBuffer();
 	deleteObject(pipes);
-
+	
 	deleteObject(stations);
 
 	cout << "Введите имя Файла: ";
