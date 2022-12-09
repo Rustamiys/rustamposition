@@ -14,6 +14,7 @@ Pipe::Pipe(){
 	inRepair = 0;
 	inputStation = 0;
 	outputStation = 0;
+	throughput = 0;
 }
 
 string Pipe::getName() const
@@ -63,6 +64,10 @@ void Pipe::setOutputStation(int id) {
 	outputStation = id;
 }
 
+void Pipe::setThroughput() {
+	throughput = length * diametr;
+}
+
 void Pipe::saveToFile(ofstream& fout)
 {
 	fout << "p" << endl
@@ -80,6 +85,7 @@ void Pipe::downloadFromFile(ifstream& fin)
 	fin >> ws;
 	getline(fin, name);
 	fin >> id >> length >> diametr >> inRepair >> inputStation >> outputStation;
+	throughput = length * diametr;
 }
 
 ostream& operator << (ostream& out, const Pipe& p) {
@@ -87,7 +93,8 @@ ostream& operator << (ostream& out, const Pipe& p) {
 		<< "ID: " << p.id << endl
 		<< "Длина: " << p.length << endl
 		<< "Диаметр: " << p.diametr << endl
-		<< ((p.inRepair) ? "В работе " : "Не в работе") << endl;
+		<< ((p.inRepair) ? "В работе " : "Не в работе") << endl
+		<< "Производительность: " << p.throughput << endl;
 
 	return out;
 }

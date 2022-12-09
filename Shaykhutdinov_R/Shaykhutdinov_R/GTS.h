@@ -19,12 +19,13 @@ class GTS
 	public:
 		GTS();
 		void addGTS(unordered_map <int, Pipe>& pipes, unordered_map <int, Station>& stations);
-		void deleteP(unordered_map<int, Pipe>& pipes);
+		void checkIdStationsInPipe(unordered_map<int, Pipe>& pipes);
 		void IncludeToGraph(Pipe p);
 		void deleteAll();
 		void print();
 		void dfs(int v);
 		void topological_sort();
+		void MinWay();
 };
 
 

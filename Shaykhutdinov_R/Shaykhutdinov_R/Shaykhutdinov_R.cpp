@@ -280,7 +280,6 @@ int main() {
 		{
 			set <int> selectedPipes = selectPipesByFilter(pipes);
 			editPipeByFilter(pipes, selectedPipes);
-			gts.deleteP(pipes);
 			break;
 		}
 
@@ -292,7 +291,6 @@ int main() {
 			if (pipes.size() > 0) {
 				int num = GetCorrectNumber("Id трубы которую хотите удалить: ", 1, Pipe::idP);
 				deleteObject(pipes, num);
-				gts.deleteP(pipes);
 			}
 			else {
 				cout << "Труб нет" << endl;
@@ -309,10 +307,12 @@ int main() {
 			}
 			break;
 		case 12:
+
 			gts.addGTS(pipes, stations);
 
 			break;
 		case 13:
+			gts.checkIdStationsInPipe(pipes);
 			gts.topological_sort();
 			
 			break;

@@ -11,6 +11,7 @@ class Pipe {
 		int id;
 		int inputStation;
 		int outputStation;
+		int throughput;
 
 	public:
 		Pipe();
@@ -27,6 +28,7 @@ class Pipe {
 		void saveToFile(std::ofstream& fout);
 		void setInputStation(int id);
 		void setOutputStation(int id);
+		void setThroughput();
 		void setDiametr(double diametr);
 		void downloadFromFile(std::ifstream& fin);
 		friend std::istream& operator >> (std::istream& in, Pipe& p);

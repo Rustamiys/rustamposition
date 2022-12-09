@@ -52,13 +52,13 @@ void GTS::addGTS(unordered_map <int, Pipe>& pipes, unordered_map <int, Station>&
 		q = p.getId();
 		pipes[q].setInputStation(idStationIn);
 		pipes[q].setOutputStation(idStationOut);
+		p.setThroughput();
 		IncludeToGraph(pipes[q]);
 	}
 }
 
-void GTS::deleteP(unordered_map <int, Pipe>& pipes) {
-	graph.clear();
-	idks.clear();
+void GTS::checkIdStationsInPipe(unordered_map <int, Pipe>& pipes) {
+	deleteAll();
 	for (auto& it : pipes)
 		if (it.second.getInputStation() != 0)
 			IncludeToGraph(it.second);
@@ -142,4 +142,9 @@ void GTS::topological_sort() {
 		cout << i << " -> ";
 	}
 	cout << endl;
+}
+
+
+void GTS::MinWay() {
+
 }
