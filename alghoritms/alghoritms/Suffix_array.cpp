@@ -233,8 +233,5 @@ int main() {
     cout << (br == suf? "Equal " : "not equal ") << endl;
 
     cout << "Size " << text.size();
-
-
-    return 0;
 }
 
