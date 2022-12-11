@@ -15,6 +15,7 @@ Pipe::Pipe(){
 	inputStation = 0;
 	outputStation = 0;
 	throughput = 0;
+	weight = INFINITY;
 }
 
 string Pipe::getName() const
@@ -68,6 +69,14 @@ void Pipe::setThroughput() {
 	throughput = length * diametr;
 }
 
+void Pipe::setWeight() {
+	weight = (inRepair ? length : INFINITY);
+}
+
+double Pipe::getWeight() const {
+	return weight;
+}
+
 void Pipe::saveToFile(ofstream& fout)
 {
 	fout << "p" << endl
@@ -85,7 +94,8 @@ void Pipe::downloadFromFile(ifstream& fin)
 	fin >> ws;
 	getline(fin, name);
 	fin >> id >> length >> diametr >> inRepair >> inputStation >> outputStation;
-	throughput = length * diametr;
+	setThroughput();
+	setWeight();
 }
 
 ostream& operator << (ostream& out, const Pipe& p) {
@@ -94,7 +104,8 @@ ostream& operator << (ostream& out, const Pipe& p) {
 		<< "Длина: " << p.length << endl
 		<< "Диаметр: " << p.diametr << endl
 		<< ((p.inRepair) ? "В работе " : "Не в работе") << endl
-		<< "Производительность: " << p.throughput << endl;
+		<< "Производительность: " << p.throughput << endl
+		<< "Вес:" << p.weight << endl;
 
 	return out;
 }
@@ -108,6 +119,8 @@ istream& operator >> (istream& in, Pipe& p) {
 	p.length = GetCorrectNumber("Длина: ", 0.1, 3.4E+38);
 	p.diametr = GetCorrectNumber("Диаметр: ", 0.1, 3.4E+38);
 	p.inRepair = (bool)GetCorrectNumber("В работе: ", 0, 1);
+	p.setThroughput();
+	p.setWeight();
 	return in;
 }
 

@@ -217,10 +217,10 @@ int main() {
 	
 	
 	for (;;) {
-
+		cout << endl << endl;
 		printMenu();
-
-		switch (GetCorrectNumber("Выберете действие: ", 0, 13)) {
+		cout << endl << endl;
+		switch (GetCorrectNumber("Выберете действие: ", 0, 14)) {
 
 		case 0:
 			return 0;
@@ -251,7 +251,7 @@ int main() {
 				int id = GetCorrectNumber("Введите id трубы: ", 1, Pipe::idP);
 				pipes[id].editPipe(!pipes[id].getInRepair());
 			}
-			else { 
+			else {
 				cout << "Труб нет" << endl;
 			}
 			break;
@@ -264,7 +264,7 @@ int main() {
 				cout << "Станций не найдено" << endl;
 			}
 			break;
-	
+
 		case 6:
 			saveToFile(pipes, stations);
 			break;
@@ -314,10 +314,12 @@ int main() {
 		case 13:
 			gts.checkIdStationsInPipe(pipes);
 			gts.topological_sort();
-			
+
+			break;
+		case 14:
+			gts.MinPath(pipes);
 			break;
 		}
-
 	}
 }
 

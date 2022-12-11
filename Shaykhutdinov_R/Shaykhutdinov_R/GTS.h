@@ -24,8 +24,9 @@ class GTS
 		void deleteAll();
 		void print();
 		void dfs(int v);
+		void fillIdks();
 		void topological_sort();
-		void MinWay();
+		void MinPath(unordered_map<int, Pipe>& p);
 };
 
 

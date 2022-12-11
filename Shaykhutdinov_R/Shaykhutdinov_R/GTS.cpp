@@ -41,6 +41,7 @@ void GTS::addGTS(unordered_map <int, Pipe>& pipes, unordered_map <int, Station>&
 			pipes[i].setOutputStation(idStationOut);
 			q = i;
 			IncludeToGraph(pipes[q]);
+			q = 1;
 			break;
 		}
 	}
@@ -52,8 +53,9 @@ void GTS::addGTS(unordered_map <int, Pipe>& pipes, unordered_map <int, Station>&
 		q = p.getId();
 		pipes[q].setInputStation(idStationIn);
 		pipes[q].setOutputStation(idStationOut);
-		p.setThroughput();
 		IncludeToGraph(pipes[q]);
+		p.setThroughput();
+		p.setWeight();
 	}
 }
 
@@ -110,16 +112,19 @@ void GTS::dfs(int v) {
 	used[v] = -1;
 }
 
-
-void GTS::topological_sort() {
-	int j = 0;
+void GTS::fillIdks() {
+	idks.clear();
 	for (auto& it : graph) {
 		idks.emplace(it.first);
 		for (int i : it.second) {
 			if (!idks.contains(i)) idks.emplace(i);
 		}
 	}
-	
+}
+
+void GTS::topological_sort() {
+	int j = 0;
+	fillIdks();
 	for (int i : idks) {
 		used.emplace(i, 0);
 		j++;
@@ -145,6 +150,84 @@ void GTS::topological_sort() {
 }
 
 
-void GTS::MinWay() {
 
+void GTS::MinPath(unordered_map<int, Pipe>& p) {
+	fillIdks();
+	int begin_index = GetCorrectNumber("Введите начальную вершину: ", 0, Station::idS);
+	int end_index = GetCorrectNumber("Введите конечную вершину: ", 0, Station::idS);
+	if (!idks.contains(begin_index) && !idks.contains(end_index)) {
+		cout << "ERROR" << endl;
+		return;
+	}
+	if (begin_index == end_index) {
+		cout << "Минимальный вес: 0" << endl;
+		return;
+	}
+
+	unordered_map<int, unordered_map<int, double>> matrixmin;
+	for (int i : idks) {
+		unordered_map<int, double> q;
+		for (int j : idks) {
+			q.emplace(j, INFINITY);
+		}
+		matrixmin.emplace(i, q);
+	}
+	
+	for (auto& it : p)
+		if (it.second.getInputStation() != 0)
+			matrixmin[it.second.getInputStation()][it.second.getOutputStation()] = it.second.getWeight();
+	
+	//Дейкстра
+	unordered_map<int, double> minweight;
+	unordered_map<int, bool> used;
+	unordered_map<int, int> par;
+	for (int j : idks) {
+		minweight.emplace(j, INFINITY);
+		used.emplace(j, false);
+	}
+	
+	minweight[begin_index] = 0;
+	
+	int index = begin_index, u = 0;
+	for (auto& it : matrixmin) {
+		double min = INFINITY;
+		for (auto& q : minweight) {
+			if (!used[q.first] && q.second < min) {
+				min = q.second;
+				index = q.first;
+			}
+		}
+
+		used[index] = true;
+		for (auto& qm : it.second) {
+			int j = qm.first;
+			if (!used[j] && matrixmin[index][j] != INFINITY && minweight[index] != INFINITY && (minweight[index] + matrixmin[index][j]) < minweight[j]) {
+				minweight[j] = minweight[index] + matrixmin[index][j];
+				par[j] = index;
+			}
+		}
+	}
+	cout << "MIN way: " << minweight[end_index] << endl;
+
+	//Восстановление пути
+	vector<int> path;
+	for (int v = end_index; v != begin_index; v = par[v])
+		path.push_back(v);
+	path.push_back(begin_index);
+	reverse(path.begin(), path.end());
+
+	//Вывод пути
+	cout << endl << "{";
+	for (int i : path)
+		cout << i << "->";
+	cout << "}" << endl;
+
+	// Вывод матрицы
+	for (auto& it : matrixmin) {
+		cout << it.first << "{ ";
+		for (auto& qw : it.second) {
+			cout << qw.second << " ";
+		}
+		cout << "}" << endl;
+	}
 }

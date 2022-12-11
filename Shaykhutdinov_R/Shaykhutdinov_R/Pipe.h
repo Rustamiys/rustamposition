@@ -11,7 +11,8 @@ class Pipe {
 		int id;
 		int inputStation;
 		int outputStation;
-		int throughput;
+		double throughput;
+		double weight;
 
 	public:
 		Pipe();
@@ -29,6 +30,8 @@ class Pipe {
 		void setInputStation(int id);
 		void setOutputStation(int id);
 		void setThroughput();
+		void setWeight();
+		double getWeight() const;
 		void setDiametr(double diametr);
 		void downloadFromFile(std::ifstream& fin);
 		friend std::istream& operator >> (std::istream& in, Pipe& p);
