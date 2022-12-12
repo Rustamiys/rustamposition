@@ -40,8 +40,6 @@ void GTS::addGTS(unordered_map <int, Pipe>& pipes, unordered_map <int, Station>&
 			pipes[i].setInputStation(idStationIn);
 			pipes[i].setOutputStation(idStationOut);
 			q = i;
-			IncludeToGraph(pipes[q]);
-			q = 1;
 			break;
 		}
 	}
@@ -53,7 +51,6 @@ void GTS::addGTS(unordered_map <int, Pipe>& pipes, unordered_map <int, Station>&
 		q = p.getId();
 		pipes[q].setInputStation(idStationIn);
 		pipes[q].setOutputStation(idStationOut);
-		IncludeToGraph(pipes[q]);
 		p.setThroughput();
 		p.setWeight();
 	}
@@ -122,9 +119,10 @@ void GTS::fillIdks() {
 	}
 }
 
-void GTS::topological_sort() {
-	int j = 0;
+void GTS::topological_sort(unordered_map<int, Pipe>& p) {
+	checkIdStationsInPipe(p);
 	fillIdks();
+	int j = 0;
 	for (int i : idks) {
 		used.emplace(i, 0);
 		j++;
@@ -149,10 +147,22 @@ void GTS::topological_sort() {
 	cout << endl;
 }
 
+void GTS::createMatrix() {
+	for (int i : idks) {
+		unordered_map<int, double> q;
+		for (int j : idks) {
+			q.emplace(j, INFINITY);
+		}
+		matrixmin.emplace(i, q);
+	}
+}
 
 
 void GTS::MinPath(unordered_map<int, Pipe>& p) {
+	matrixmin.clear();
+	checkIdStationsInPipe(p);
 	fillIdks();
+
 	int begin_index = GetCorrectNumber("Введите начальную вершину: ", 0, Station::idS);
 	int end_index = GetCorrectNumber("Введите конечную вершину: ", 0, Station::idS);
 	if (!idks.contains(begin_index) && !idks.contains(end_index)) {
@@ -163,16 +173,7 @@ void GTS::MinPath(unordered_map<int, Pipe>& p) {
 		cout << "Минимальный вес: 0" << endl;
 		return;
 	}
-
-	unordered_map<int, unordered_map<int, double>> matrixmin;
-	for (int i : idks) {
-		unordered_map<int, double> q;
-		for (int j : idks) {
-			q.emplace(j, INFINITY);
-		}
-		matrixmin.emplace(i, q);
-	}
-	
+	createMatrix();
 	for (auto& it : p)
 		if (it.second.getInputStation() != 0)
 			matrixmin[it.second.getInputStation()][it.second.getOutputStation()] = it.second.getWeight();
@@ -230,4 +231,26 @@ void GTS::MinPath(unordered_map<int, Pipe>& p) {
 		}
 		cout << "}" << endl;
 	}
+}
+
+void GTS::MaxFlow(unordered_map<int, Pipe> &p){
+	matrixmin.clear();
+	checkIdStationsInPipe(p);
+	fillIdks();
+	createMatrix();
+
+	int begin_index = GetCorrectNumber("Введите начальную вершину: ", 0, Station::idS);
+	int end_index = GetCorrectNumber("Введите конечную вершину: ", 0, Station::idS);
+	if (!idks.contains(begin_index) && !idks.contains(end_index)) {
+		cout << "ERROR" << endl;
+		return;
+	}
+	if (begin_index == end_index) {
+		cout << "Максимальный поток: Inf" << endl;
+		return;
+	}
+	for (auto& it : p)
+		if (it.second.getInputStation() != 0)
+			matrixmin[it.second.getInputStation()][it.second.getOutputStation()] = it.second.getThroughput();
+
 }

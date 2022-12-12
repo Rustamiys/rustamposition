@@ -214,7 +214,7 @@ int main() {
 	GTS gts;
 	unordered_map <int, Pipe> pipes;
 	unordered_map <int, Station> stations;
-	
+	unordered_map<int, int> qwq;
 	
 	for (;;) {
 		cout << endl << endl;
@@ -272,8 +272,6 @@ int main() {
 		case 7:
 			gts.deleteAll();
 			downloadFromFile(pipes, stations);
-			for (auto& it : pipes)
-				if (it.second.getInputStation() != 0) gts.IncludeToGraph(it.second);
 			break;
 
 		case 8:
@@ -312,13 +310,14 @@ int main() {
 
 			break;
 		case 13:
-			gts.checkIdStationsInPipe(pipes);
-			gts.topological_sort();
+			gts.topological_sort(pipes);
 
 			break;
 		case 14:
 			gts.MinPath(pipes);
 			break;
+		case 15:
+			gts.MaxFlow(pipes);
 		}
 	}
 }

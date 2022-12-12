@@ -77,6 +77,10 @@ double Pipe::getWeight() const {
 	return weight;
 }
 
+double Pipe::getThroughput() const {
+	return throughput;
+}
+
 void Pipe::saveToFile(ofstream& fout)
 {
 	fout << "p" << endl

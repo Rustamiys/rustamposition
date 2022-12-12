@@ -15,6 +15,7 @@ class GTS
 		unordered_map<int, int> used;
 		vector<int> ans;
 		set<int> cycl;
+		unordered_map<int, unordered_map<int, double>> matrixmin;
 		
 	public:
 		GTS();
@@ -25,8 +26,10 @@ class GTS
 		void print();
 		void dfs(int v);
 		void fillIdks();
-		void topological_sort();
+		void topological_sort(unordered_map<int, Pipe>& p);
+		void createMatrix();
 		void MinPath(unordered_map<int, Pipe>& p);
+		void MaxFlow(unordered_map<int, Pipe>& p);
 };
 
 

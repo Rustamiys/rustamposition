@@ -32,6 +32,7 @@ class Pipe {
 		void setThroughput();
 		void setWeight();
 		double getWeight() const;
+		double getThroughput() const;
 		void setDiametr(double diametr);
 		void downloadFromFile(std::ifstream& fin);
 		friend std::istream& operator >> (std::istream& in, Pipe& p);
