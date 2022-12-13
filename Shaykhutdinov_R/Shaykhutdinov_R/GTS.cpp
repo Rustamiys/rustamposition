@@ -49,6 +49,7 @@ void GTS::addGTS(unordered_map <int, Pipe>& pipes, unordered_map <int, Station>&
 		cin >> p;
 		p.setDiametr(d);
 		q = p.getId();
+		pipes.emplace(q, p);
 		pipes[q].setInputStation(idStationIn);
 		pipes[q].setOutputStation(idStationOut);
 		p.setThroughput();
@@ -157,6 +158,15 @@ void GTS::createMatrix() {
 	}
 }
 
+void GTS::printMatrix() {
+	for (auto& it : matrixmin) {
+		cout << it.first << "{ ";
+		for (auto& qw : it.second) {
+			cout << qw.second << " ";
+		}
+		cout << "}" << endl;
+	}
+}
 
 void GTS::MinPath(unordered_map<int, Pipe>& p) {
 	matrixmin.clear();
@@ -224,13 +234,29 @@ void GTS::MinPath(unordered_map<int, Pipe>& p) {
 	cout << "}" << endl;
 
 	// Вывод матрицы
-	for (auto& it : matrixmin) {
-		cout << it.first << "{ ";
-		for (auto& qw : it.second) {
-			cout << qw.second << " ";
+	printMatrix();
+}
+
+bool GTS::bfs(int s, int t, unordered_map<int, int> & parent) {
+	unordered_map<int, bool> visited;
+	queue<int> q;
+	for (int i : idks)
+		visited[i] = false;
+	visited[s] = true;
+	q.push(s);
+
+	while (!q.empty()) {
+		int u = q.front();
+		q.pop();
+		for (int i : idks) {
+			if (visited[i] == false && matrixmin[u][i] > 0) {
+				q.push(i);
+				visited[i] = true;
+				parent[i] = u;
+			}
 		}
-		cout << "}" << endl;
 	}
+	return visited[t];
 }
 
 void GTS::MaxFlow(unordered_map<int, Pipe> &p){
@@ -249,8 +275,41 @@ void GTS::MaxFlow(unordered_map<int, Pipe> &p){
 		cout << "Максимальный поток: Inf" << endl;
 		return;
 	}
+	for (auto& it : matrixmin)
+		for (auto& q : it.second)
+			matrixmin[it.first][q.first] = 0;
+
 	for (auto& it : p)
 		if (it.second.getInputStation() != 0)
 			matrixmin[it.second.getInputStation()][it.second.getOutputStation()] = it.second.getThroughput();
 
+	printMatrix();
+	//Алгоритм Форда-Фалкерсона
+	double max_flow = 0;
+	int n = idks.size();
+	double path_flow;
+	unordered_map<int, int> parent;
+	for (int i : idks)
+		parent[i] = -1;
+
+	while (bfs(begin_index, end_index, parent)) {
+		path_flow = INFINITY;
+		int s = end_index;
+		while (s != begin_index) {
+			path_flow = min(path_flow, matrixmin[parent[s]][s]);
+			s = parent[s];
+		}
+		max_flow += path_flow;
+		int v = end_index;
+		while (v != begin_index) {
+			int u = parent[v];
+			matrixmin[u][v] -= path_flow;
+			v = parent[v];
+		}
+	}
+
+	
+	cout << "Максимальный поток: " << max_flow << endl;
+	printMatrix();
 }
+

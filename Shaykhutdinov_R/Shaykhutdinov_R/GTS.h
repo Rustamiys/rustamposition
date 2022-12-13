@@ -5,6 +5,7 @@
 #include "Utils.h"
 #include <unordered_set>
 #include <vector>
+#include <queue>
 
 class GTS
 {
@@ -28,7 +29,9 @@ class GTS
 		void fillIdks();
 		void topological_sort(unordered_map<int, Pipe>& p);
 		void createMatrix();
+		void printMatrix();
 		void MinPath(unordered_map<int, Pipe>& p);
+		bool bfs(int s, int t, unordered_map<int, int> & parent);
 		void MaxFlow(unordered_map<int, Pipe>& p);
 };
 

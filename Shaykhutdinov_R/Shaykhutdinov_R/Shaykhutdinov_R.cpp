@@ -214,13 +214,12 @@ int main() {
 	GTS gts;
 	unordered_map <int, Pipe> pipes;
 	unordered_map <int, Station> stations;
-	unordered_map<int, int> qwq;
-	
+
 	for (;;) {
 		cout << endl << endl;
 		printMenu();
 		cout << endl << endl;
-		switch (GetCorrectNumber("Выберете действие: ", 0, 14)) {
+		switch (GetCorrectNumber("Выберете действие: ", 0, 18)) {
 
 		case 0:
 			return 0;
@@ -318,6 +317,19 @@ int main() {
 			break;
 		case 15:
 			gts.MaxFlow(pipes);
+			break;
+		case 16:
+			system("cls");
+			clearBuffer();
+			break;
+		case 17:
+			deleteObject(pipes);
+			Pipe::idP = 0;
+			break;
+		case 18:
+			deleteObject(stations);
+			Station::idS = 0;
+			break;
 		}
 	}
 }
