@@ -66,7 +66,7 @@ void Pipe::setOutputStation(int id) {
 }
 
 void Pipe::setThroughput() {
-	throughput = length * diametr;
+	throughput = (inRepair ? length * diametr : 0);
 }
 
 void Pipe::setWeight() {

@@ -32,6 +32,7 @@ class GTS
 		void printMatrix();
 		void MinPath(unordered_map<int, Pipe>& p);
 		bool bfs(int s, int t, unordered_map<int, int> & parent);
+		void checkPipesInRepair(unordered_map<int, Pipe>& p);
 		void MaxFlow(unordered_map<int, Pipe>& p);
 };
 

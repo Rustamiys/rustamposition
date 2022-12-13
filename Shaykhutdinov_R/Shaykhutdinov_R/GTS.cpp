@@ -172,6 +172,7 @@ void GTS::MinPath(unordered_map<int, Pipe>& p) {
 	matrixmin.clear();
 	checkIdStationsInPipe(p);
 	fillIdks();
+	checkPipesInRepair(p);
 
 	int begin_index = GetCorrectNumber("Введите начальную вершину: ", 0, Station::idS);
 	int end_index = GetCorrectNumber("Введите конечную вершину: ", 0, Station::idS);
@@ -259,7 +260,15 @@ bool GTS::bfs(int s, int t, unordered_map<int, int> & parent) {
 	return visited[t];
 }
 
+void GTS::checkPipesInRepair(unordered_map<int, Pipe>& p) {
+	for (auto& it : p) {
+		p[it.first].setThroughput();
+		p[it.first].setWeight();
+	}
+}
+
 void GTS::MaxFlow(unordered_map<int, Pipe> &p){
+	checkPipesInRepair(p);
 	matrixmin.clear();
 	checkIdStationsInPipe(p);
 	fillIdks();
@@ -284,6 +293,7 @@ void GTS::MaxFlow(unordered_map<int, Pipe> &p){
 			matrixmin[it.second.getInputStation()][it.second.getOutputStation()] = it.second.getThroughput();
 
 	printMatrix();
+	cout << endl;
 	//Алгоритм Форда-Фалкерсона
 	double max_flow = 0;
 	int n = idks.size();
@@ -310,6 +320,5 @@ void GTS::MaxFlow(unordered_map<int, Pipe> &p){
 
 	
 	cout << "Максимальный поток: " << max_flow << endl;
-	printMatrix();
 }
 
