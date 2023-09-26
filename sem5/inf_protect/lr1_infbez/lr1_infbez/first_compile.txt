@@ -1,0 +1,173 @@
+#include <iostream>
+#include <unsigned char>
+#include <fstream>
+#include <Windows.h>
+
+using namespace std;
+
+const int n = 256;
+void vigenereTable(int a[][n]);
+unsigned char encryption(int a[n][n], unsigned char word, unsigned char key);
+unsigned char decryption(int a[n][n], unsigned char encrypted_word, unsigned char key);
+int getCorrectNumber(unsigned char text, int min, int max);
+
+void clearBuffer() {
+	cin.clear();
+	cin.ignore(1024, '\n');
+}
+
+int main()
+{
+	int a[n][n];
+	vigenereTable(a);
+	SetConsoleCP(1251);
+	SetConsoleOutputCP(1251);
+	unsigned char key;
+	unsigned char word;
+	unsigned char dopw;
+	unsigned char file_name;
+	//std::locale::global(std::locale("rus_rus.866"));
+	//wcin.imbue(std::locale());
+	//wcout.imbue(std::locale());
+
+
+	while (true) {
+		cout << "1. Кодирование" << endl << "2. Декодирование" << endl << "3. Сохранить в файл" << endl
+			<< "4. Загрузить из файла" << endl << "0. Закончить программу" << endl;
+		int num = getCorrectNumber("Выберите число: ", 0, 4);
+		clearBuffer();
+		switch (num)
+		{
+		case 0:
+			return 0;
+			//Шайхутдинов Рустам АС-21-04
+		case 1:
+			cout << "Ключ: ";
+			getline(cin, key);
+			word = encryption(a, word, key);
+			break;
+		case 2:
+			cout << "Key: ";
+			getline(cin, key);
+			word = decryption(a, word, key);
+			break;
+		case 3:
+		{
+
+			cout << "Input filename: ";
+			getline(cin, file_name);
+			ofstream outing(file_name, ios::binary);
+			outing << word;
+			outing.close();
+
+			break;
+		}
+		case 4:
+		{
+			word.clear();
+			cout << "Input filename: ";
+			getline(cin, file_name);
+
+			ifstream ining(file_name, ios::binary);
+			if (ining.is_open())
+			{
+				char curr_char;
+				while (!ining.eof() && ining.get(curr_char))
+				{
+					word += unsigned char(curr_char);
+				}
+			}
+			ining.close();
+			break;
+		}
+		default:
+			break;
+		}
+	}
+	return 0;
+	unsigned char encrypted_word;
+	unsigned char deciphered_word;
+	cout << "WORD: " << word << endl;
+	cout << "KEY: " << key << endl;
+	encrypted_word = encryption(a, word, key);
+	deciphered_word = decryption(a, encrypted_word, key);
+	cout << "ENCRYPTED_WORD: " << encrypted_word << endl;
+	cout << "DECIPHERED_WORD: " << deciphered_word << endl;	
+}
+
+
+void vigenereTable(int a[][n]) {
+	int k = 0;
+	int k1 = 0;
+	for (int i = 0; i < n; i++) {
+		for (int j = 0; j < n; j++) {
+			if (k == n)
+				k = 0;
+
+			a[i][j] = k;
+			k += 1;
+		}
+		k1 += 1;
+		k = k1;
+	}
+}
+
+unsigned char decryption(int a[n][n], unsigned char encrypted_word, unsigned char key) {
+	int q = 0;
+	unsigned char dopw;
+	unsigned char deciphered_word;
+	dopw.clear();
+	for (int i = 0; i < encrypted_word.size(); i++) {
+		if (q == key.size()) q = 0;
+		dopw += key[q];
+		q += 1;
+	}
+
+	for (int i = 0; i < encrypted_word.size(); i++) {
+		auto iter1 = begin(a[int(unsigned char(dopw[i]))]);
+		auto iter2 = find(iter1, end(a[int(unsigned char(dopw[i]))]), int(unsigned char(encrypted_word[i])));
+		if (iter1 != iter2) {
+			deciphered_word += (unsigned char(a[0][abs(iter1 - iter2)-1]));
+		}
+		else {
+			deciphered_word += (unsigned char(a[0][abs(iter1 - iter2)]));
+		}
+	}
+	return deciphered_word;
+}
+
+unsigned char encryption(int a[n][n], unsigned char word, unsigned char key) {
+	int q = 0;
+	unsigned char dopw;
+	unsigned char encrypted_word;
+	
+	for (int i = 0; i < word.size(); i++) {
+		if (q == key.size()) q = 0;
+		dopw += unsigned char(key[q]);
+		q += 1;
+	}
+
+	for (int i = 0; i < word.size(); i++) {
+		encrypted_word += unsigned char(a[int(unsigned char(dopw[i]))][int(unsigned char(word[i]))] + 1);
+	}
+
+	return encrypted_word;
+}
+
+int getCorrectNumber(unsigned char text, int min, int max) {
+	cout << text;
+	int number;
+	cin >> number;
+	if (max <= min) return max;
+	for (;;) {
+		if (cin.fail() || number < min || number > max) {
+			clearBuffer();
+			cout << "Wrong input" << endl;
+			cout << text;
+			cin >> number;
+		}
+		else {
+			return number;
+		}
+	}
+}

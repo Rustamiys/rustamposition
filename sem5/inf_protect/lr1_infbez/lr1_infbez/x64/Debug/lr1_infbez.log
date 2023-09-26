@@ -1,0 +1,4 @@
+﻿  lr1_infbez.cpp
+C:\Users\admin\Desktop\kurs1\sem4\матпакеты\lr3\lr1_infbez\lr1_infbez\lr1_infbez.cpp(190,16): warning C4101: key_ch: неиспользованная локальная переменная
+C:\Users\admin\Desktop\kurs1\sem4\матпакеты\lr3\lr1_infbez\lr1_infbez\lr1_infbez.cpp(189,16): warning C4101: word_ch: неиспользованная локальная переменная
+  lr1_infbez.vcxproj -> C:\Users\admin\Desktop\kurs1\sem4\матпакеты\lr3\lr1_infbez\x64\Debug\lr1_infbez.exe
