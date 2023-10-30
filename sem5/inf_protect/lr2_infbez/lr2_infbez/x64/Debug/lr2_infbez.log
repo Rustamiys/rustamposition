@@ -1,0 +1,9 @@
+﻿  lr2_infbez.cpp
+C:\Users\admin\source\repos\lr2_infbez\lr2_infbez\lr2_infbez.cpp(19,6): warning C4215: нестандартное расширение: long float
+C:\Users\admin\source\repos\lr2_infbez\lr2_infbez\lr2_infbez.cpp(21,7): warning C4215: нестандартное расширение: long float
+C:\Users\admin\source\repos\lr2_infbez\lr2_infbez\lr2_infbez.cpp(22,8): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
+C:\Users\admin\source\repos\lr2_infbez\lr2_infbez\lr2_infbez.cpp(41,14): warning C4244: инициализация: преобразование "double" в "float", возможна потеря данных
+C:\Users\admin\source\repos\lr2_infbez\lr2_infbez\lr2_infbez.cpp(50,20): warning C4244: =: преобразование "double" в "float", возможна потеря данных
+C:\Users\admin\source\repos\lr2_infbez\lr2_infbez\lr2_infbez.cpp(112,16): warning C4101: key_ch: неиспользованная локальная переменная
+C:\Users\admin\source\repos\lr2_infbez\lr2_infbez\lr2_infbez.cpp(111,16): warning C4101: word_ch: неиспользованная локальная переменная
+  lr2_infbez.vcxproj -> C:\Users\admin\source\repos\lr2_infbez\x64\Debug\lr2_infbez.exe
